@@ -27,10 +27,18 @@ It is compiled in, so a bump only takes effect on the next deploy.
 from __future__ import annotations
 
 #: The current demo version. See the bump rule above.
-DEMO_VERSION = "v6"
+DEMO_VERSION = "v8"
 
 #: What changed in each version, newest first. One line each.
 HISTORY = {
+    "v8": "Layer 1's decision became its own `authorize_tool_surface` span. As "
+          "metadata it did not attach to the hook's span at all — it was "
+          "inherited by the middleware spans underneath, appearing four times on "
+          "spans that made no decision.",
+    "v7": "Auth made visible in the trace. `resolve_connection` is now an explicit "
+          "span around the Agent Auth fetch (credential never recorded), and all "
+          "three gate layers write their decision — role, granted, withheld, "
+          "removed tools — onto their own spans instead of reporting nothing.",
     "v6": "Renamed the two simulated identities to Lang (engineer) and Polly "
           "(employee). Display only — no grant, tool or answer changes — but the "
           "label reaches every run as `display_name`, so the traces change and "

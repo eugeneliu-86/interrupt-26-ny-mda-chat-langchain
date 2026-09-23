@@ -1,7 +1,7 @@
 [
   {
-    "run_id": "01a0ce32-f031-7b30-9e41-51521b565aef",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f031-7b30-9e41-51521b565aef",
+    "run_id": "01a0cebd-6163-79d2-9f26-833241559098",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-6163-79d2-9f26-833241559098",
     "rejected": false,
     "q1_identity": {
       "pass": true,
@@ -34,14 +34,14 @@
       "pass": true,
       "count": 0
     },
-    "demo_version": "v5",
+    "demo_version": "v8",
     "model": [
       "gpt-5.6-luna"
     ]
   },
   {
-    "run_id": "01a0ce32-f02a-71e0-9941-7cbe5cce9737",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f02a-71e0-9941-7cbe5cce9737",
+    "run_id": "01a0cebd-60da-7c90-9e7e-a7e8915f1ce4",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-60da-7c90-9e7e-a7e8915f1ce4",
     "rejected": false,
     "q1_identity": {
       "pass": true,
@@ -72,14 +72,14 @@
       "pass": true,
       "count": 0
     },
-    "demo_version": "v5",
+    "demo_version": "v8",
     "model": [
       "gpt-5.6-luna"
     ]
   },
   {
-    "run_id": "01a0ce32-f024-73a3-a983-a90bbe159efc",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f024-73a3-a983-a90bbe159efc",
+    "run_id": "01a0cebd-601a-74f0-bced-8d9d75fef6d8",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-601a-74f0-bced-8d9d75fef6d8",
     "rejected": true,
     "q1_identity": {
       "pass": true,
@@ -100,12 +100,12 @@
       "pass": true,
       "count": 0
     },
-    "demo_version": "v5",
+    "demo_version": "v8",
     "model": []
   },
   {
-    "run_id": "01a0ce32-f033-7590-a1fe-5a854abfa8a2",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f033-7590-a1fe-5a854abfa8a2",
+    "run_id": "01a0cebd-60a7-7542-ac8e-835efd25282e",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-60a7-7542-ac8e-835efd25282e",
     "rejected": true,
     "q1_identity": {
       "pass": true,
@@ -126,12 +126,12 @@
       "pass": true,
       "count": 0
     },
-    "demo_version": "v5",
+    "demo_version": "v8",
     "model": []
   },
   {
-    "run_id": "01a0ce32-f02c-7211-9117-6624bd01e846",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f02c-7211-9117-6624bd01e846",
+    "run_id": "01a0cebd-600a-7282-8159-f9331f08cc27",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-600a-7282-8159-f9331f08cc27",
     "rejected": false,
     "q1_identity": {
       "pass": true,
@@ -161,14 +161,14 @@
       "pass": true,
       "count": 0
     },
-    "demo_version": "v5",
+    "demo_version": "v8",
     "model": [
       "gpt-5.6-luna"
     ]
   },
   {
-    "run_id": "01a0ce32-f023-7d93-948e-48fe5a9a6931",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f023-7d93-948e-48fe5a9a6931",
+    "run_id": "01a0cebd-602d-7222-95ac-81a2b78bacda",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-602d-7222-95ac-81a2b78bacda",
     "rejected": false,
     "q1_identity": {
       "pass": true,
@@ -194,7 +194,6 @@
       ],
       "tools": [
         "engineeringDocs__search_docs",
-        "productDocs__fetch_doc",
         "productDocs__search_docs",
         "read_file"
       ]
@@ -203,14 +202,14 @@
       "pass": true,
       "count": 0
     },
-    "demo_version": "v5",
+    "demo_version": "v8",
     "model": [
       "gpt-5.6-luna"
     ]
   },
   {
-    "run_id": "01a0ce32-f019-7e83-9c3d-fad6377cd068",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f019-7e83-9c3d-fad6377cd068",
+    "run_id": "01a0cebd-6116-71a1-856f-5397c28a2460",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-6116-71a1-856f-5397c28a2460",
     "rejected": false,
     "q1_identity": {
       "pass": true,
@@ -232,7 +231,6 @@
         "productDocs"
       ],
       "tools": [
-        "ls",
         "productDocs__search_docs",
         "read_file"
       ]
@@ -241,7 +239,7 @@
       "pass": true,
       "count": 0
     },
-    "demo_version": "v5",
+    "demo_version": "v8",
     "model": [
       "gpt-5.6-luna"
     ]

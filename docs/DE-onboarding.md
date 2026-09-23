@@ -138,9 +138,53 @@ Open any run in the project above.
 | Question | Where |
 |---|---|
 | Who made this run? | Root run → Metadata → `role`, `display_name` |
-| What could it reach? | The model call span → its tool list |
+| What could it reach? | The **`authorize_tool_surface`** span → `granted`, `withheld` |
 | What did it actually call? | The tool spans, named `{corpus}__{tool}` |
-| Was anything denied? | A tool span with an error. **Absent in every healthy run** |
+| Was anything denied? | `deny_ungranted_tool` → `decision`. `denied` should never appear |
+| **Where did the credential come from?** | The **`resolve_connection`** span, under the tool that used it |
+
+### The four spans that show MDA doing the auth
+
+This is the part worth rehearsing, because it is the demo's strongest claim
+and it used to be invisible:
+
+```text
+role-aware-docs-assistant
+├─ reject_unknown_role.before_agent      decision: admitted · role: employee
+├─ model
+│  └─ …harness middleware…
+│     └─ role_gate.awrap_model_call
+│        └─ authorize_tool_surface       granted: [productDocs]
+│                                        withheld: [engineeringDocs]
+│                                        removed_tools: [engineeringDocs__*]
+└─ tools
+   └─ deny_ungranted_tool.awrap_tool_call   decision: allowed
+      └─ productDocs__search_docs
+         └─ resolve_connection           connection: context-hub-corpus
+                                         owner: agent · source: MDA Agent Auth
+                                         credential: <never recorded>
+```
+
+Open `authorize_tool_surface` and `resolve_connection` side by side. The
+first is the gate deciding, before the model was asked anything. The second
+is **MDA fetching the credential for that run** — per call, never cached,
+never in the repo.
+
+Say the last part precisely: the span proves a credential *was resolved* and
+names the connection. It does not show the credential, deliberately. If
+someone wants to see which secret is behind the slug, that is
+`mda connections list`, not the trace.
+
+**One gotcha on stage:** the corpus snapshot caches for 60 seconds, so
+`resolve_connection` only appears on a cache miss and the tool span says
+`corpus_cache: hit` otherwise. Run the UI with `CORPUS_CACHE_TTL=0` if you
+want every question to show the resolution.
+
+**Two spans you will not find, and should not look for:** `role_gate` and
+`deny_ungranted_tool` are *wrappers*, not graph nodes, so LangGraph Studio
+cannot draw them — only `before_agent`/`after_agent` hooks become nodes.
+They exist in the trace as nested spans. That is why `authorize_tool_surface`
+was added: it is the one pointable artifact the tool-filtering layer makes.
 
 Filtering the project by `metadata.role` splits the runs cleanly.
 

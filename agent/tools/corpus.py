@@ -33,6 +33,64 @@ CACHE_TTL_SECONDS = float(os.environ.get("CORPUS_CACHE_TTL", "60"))
 _CACHE: dict[str, tuple[float, str, dict[str, str]]] = {}
 
 
+async def resolve_credential(slug: str, prefix: str) -> str:
+    """Fetch the corpus credential from Agent Auth, as a VISIBLE trace step.
+
+    THE DEMO'S CENTRAL CLAIM, MADE OBSERVABLE. MDA resolves this credential
+    per call — its own runtime says resolution "reads Agent Auth on every
+    await and never caches material" — and until this span existed it did so
+    completely invisibly. A trace showed `engineeringDocs__fetch_doc` being
+    called and nothing at all about where its credential came from, so
+    "MDA handles auth for you" was a sentence someone had to take on trust.
+
+    Now it is a step you can point at, next to the tool call that used it.
+
+    THE CREDENTIAL NEVER ENTERS THE SPAN. This uses the `trace` context
+    manager rather than `@traceable` for exactly that reason: a decorator
+    records the function's return value, and this function returns the key.
+    Inputs and outputs are written by hand here, and the key is not among
+    them — only the fact that one was resolved, and how long it took.
+
+    We can only trace this at OUR boundary; MDA does not emit a span of its
+    own. That boundary is where the claim lives anyway.
+    """
+    from langsmith.run_helpers import trace
+
+    started = time.monotonic()
+    try:
+        with trace(
+            name="resolve_connection",
+            run_type="chain",
+            inputs={"connection": slug, "owner": "agent", "corpus": prefix},
+        ) as span:
+            key = await connections.get(slug, {"type": "agent"})
+            span.end(
+                outputs={
+                    "resolved": True,
+                    "source": "MDA Agent Auth",
+                    "credential": "<never recorded>",
+                    "ms": round((time.monotonic() - started) * 1000),
+                }
+            )
+            return key
+    except ImportError:
+        # Tracing is a convenience; resolution is not. Offline tests build
+        # tools without langsmith present.
+        return await connections.get(slug, {"type": "agent"})
+
+
+def _note(**fields: object) -> None:
+    """Annotate the current span. Best-effort; never breaks an answer."""
+    try:
+        from langsmith.run_helpers import get_current_run_tree
+
+        run = get_current_run_tree()
+        if run is not None:
+            run.add_metadata(dict(fields))
+    except Exception:
+        pass
+
+
 async def snapshot(prefix: str) -> tuple[str, dict[str, str]]:
     """Pull one corpus, or serve it from the short-lived cache.
 
@@ -44,6 +102,11 @@ async def snapshot(prefix: str) -> tuple[str, dict[str, str]]:
     now = time.monotonic()
     cached = _CACHE.get(prefix)
     if cached and cached[0] > now:
+        # SAY SO. A cache hit means no `resolve_connection` span appears on
+        # this tool call, and a reader who does not know that reads the
+        # absence as "no credential was involved". Set CORPUS_CACHE_TTL=0 to
+        # make every question show the resolution during a demo.
+        _note(corpus_cache="hit", corpus_cache_expires_in_s=round(cached[0] - now, 1))
         return cached[1], cached[2]
 
     repo, slug = repo_and_slug(prefix)
@@ -52,7 +115,8 @@ async def snapshot(prefix: str) -> tuple[str, dict[str, str]]:
         # (the offline tests build tools against a fake snapshot).
         from langsmith import AsyncClient
 
-        key = await connections.get(slug, {"type": "agent"})
+        _note(corpus_cache="miss")
+        key = await resolve_credential(slug, prefix)
         client = AsyncClient(api_key=key)
         snap = await client.pull_agent(repo)
         files = {p: f.content for p, f in snap.files.items()}

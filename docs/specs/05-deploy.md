@@ -143,6 +143,68 @@ All four must be answerable from the LangSmith UI in about a minute.
 | 3 | Tool call spans, prefixed by server name | ph. 02 §9 |
 | 4 | A `ToolMessage` with `status="error"` — absent in a clean run | ph. 03 §6 |
 
+### Making MDA's auth visible (v7–v8)
+
+The demo's strongest claim is *"MDA handles the auth for you."* Until v7 the
+trace could not support it. MDA was doing the work — its runtime resolves a
+connection by reading Agent Auth **on every await, caching nothing** — but it
+emitted no span, so a trace showed `productDocs__search_docs` being called and
+said nothing whatever about where its credential came from.
+
+Worse, the gate layers were nearly as mute. `reject_unknown_role.before_agent`
+recorded `{"output": null}` — indistinguishable from a hook that did nothing —
+and `role_gate` showed a filtered tool list with no record of what it filtered.
+A reader could only infer each decision from its consequence, one span lower.
+
+Four spans now carry the story, and `tests/verify_auth_visible.py` asserts all
+of them on a live run:
+
+| Span | Says |
+|---|---|
+| `reject_unknown_role.before_agent` | `decision: admitted`, and the role |
+| `authorize_tool_surface` | `granted`, `withheld`, `preference_order`, `removed_tools` — the ✗ row's server-side twin |
+| `deny_ungranted_tool.awrap_tool_call` | `allowed` / `denied` / `builtin`, per tool call |
+| `resolve_connection` | the slug, `owner: agent`, `source: MDA Agent Auth`, and how long it took |
+
+**The credential is never in the span.** `resolve_connection` is built with
+the `trace` context manager rather than `@traceable` for exactly that reason:
+a decorator records the function's return value, and that function returns the
+key. Inputs and outputs are written by hand, the key is not among them, and
+the output field reads `credential: "<never recorded>"`. The verifier scans
+**every span in the trace** for the credential, for the caller's key, and for
+any key-shaped string — a demo trace gets screenshotted.
+
+Two things learned building it, both worth keeping:
+
+- **Metadata does not attach to a `wrap_model_call` hook's own span.** Writing
+  the decision with `get_current_run_tree().add_metadata()` works in
+  `before_agent` and `wrap_tool_call`, but inside `wrap_model_call` it was
+  inherited by every middleware span created underneath instead — the decision
+  appeared four times, on spans that did not make it, and never on
+  `role_gate.awrap_model_call`. Hence an explicit child span, which is better
+  for the demo anyway: a named step you can point at rather than a metadata
+  key someone has to know to expand.
+- **A cache hit hides the resolution.** The 60-second snapshot cache means
+  `resolve_connection` appears only on a miss, and its absence reads as "no
+  credential was involved". The tools now stamp `corpus_cache: hit|miss` so
+  the absence explains itself. **Set `CORPUS_CACHE_TTL=0` for a live demo** so
+  every question shows the resolution.
+
+#### What Studio can and cannot draw
+
+Only `before_agent` / `after_agent` hooks are graph **nodes**:
+
+```text
+__start__ → SkillsMiddleware.before_agent → PatchToolCallsMiddleware.before_agent
+          → reject_unknown_role.before_agent → model ⇄ tools → …after_agent → __end__
+```
+
+`role_gate` and `deny_ungranted_tool` are **wrappers**. They do not sit
+between nodes, they wrap the inside of `model` and `tools`, so Studio can
+never draw them and they appear only as nested spans. That is a property of
+the middleware kind, not a gap to fix — and it is why `authorize_tool_surface`
+matters: it is the one pointable artifact layer 1 produces.
+
 **Connections are the weak spot.** A trace shows tool calls to
 `engineeringDocs__fetch_doc`; it does not show that the call carried the
 `engineering-docs` credential. The honest way to close that on stage is to
@@ -175,8 +237,13 @@ Two things to show together, because neither is complete alone:
 - **`mda connections list`** — the credential exists and is named.
 - **A trace** — the tool was called and which corpus commit answered.
 
-A trace does not display credential resolution, so do not claim it does. What
-you *can* demonstrate live is rotation: revoke the key, run again, watch both
+**Superseded in v7:** a trace now *does* display credential resolution, as a
+`resolve_connection` span naming the slug and the owner — though still not the
+credential itself, which is the point. The `mda connections list` screen is
+still worth showing beside it, because the span proves a connection was
+resolved and the list proves which credential is behind the slug.
+
+What you *can* demonstrate live is rotation: revoke the key, run again, watch both
 tools fail with no redeploy, restore it, run again (ph. 02 §5).
 
 ### Acceptance criteria
