@@ -27,10 +27,14 @@ It is compiled in, so a bump only takes effect on the next deploy.
 from __future__ import annotations
 
 #: The current demo version. See the bump rule above.
-DEMO_VERSION = "v5"
+DEMO_VERSION = "v6"
 
 #: What changed in each version, newest first. One line each.
 HISTORY = {
+    "v6": "Renamed the two simulated identities to Lang (engineer) and Polly "
+          "(employee). Display only — no grant, tool or answer changes — but the "
+          "label reaches every run as `display_name`, so the traces change and "
+          "the build that produced them should say so.",
     "v5": "Corpus provenance: each corpus tool stamps the Context Hub commit it "
           "read onto its own trace span, so a run says which document version "
           "answered it. Metadata only — the model never sees the hash.",

@@ -9,7 +9,7 @@ shared; you run the UI locally against it.
 ## 1 · What this is
 
 One deployed agent answers documentation questions. You pick who is asking
-from a menu — **Dana, an engineer** or **Sam, a non-technical employee** — and
+from a menu — **Lang, an engineer** or **Polly, a non-technical employee** — and
 the same question comes back with a different answer, because middleware
 hands the model a different set of tools depending on the role.
 
@@ -81,14 +81,14 @@ Three questions, in this order. All three are in the UI as one-click chips.
 
 | | |
 |---|---|
-| **Dana (engineer)** | **"Yes — required on every model call"**, because providers return 429s during normal operation. Cites `resilience-standards.md` from the internal runbooks. |
-| **Sam (employee)** | **"No requirement is stated."** The public docs describe retry middleware as one available capability, not a rule. Cites `middleware.md`. |
+| **Lang (engineer)** | **"Yes — required on every model call"**, because providers return 429s during normal operation. Cites `resilience-standards.md` from the internal runbooks. |
+| **Polly (employee)** | **"No requirement is stated."** The public docs describe retry middleware as one available capability, not a rule. Cites `middleware.md`. |
 
 A flat contradiction, and it resolves the moment the audience learns who was
 asking. Point at the tool-call chips: different corpus, different page.
 
-Reference runs — [Dana](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e2bd-7750-82f4-2dd4504b0332) ·
-[Sam](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e291-7f23-b381-180e9666ad7a)
+Reference runs — [Lang](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e2bd-7750-82f4-2dd4504b0332) ·
+[Polly](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e291-7f23-b381-180e9666ad7a)
 
 ### Beat 2 — the refusal. **This is the one that proves the mechanism.**
 
@@ -96,31 +96,31 @@ Reference runs — [Dana](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-
 
 | | |
 |---|---|
-| **Dana** | Answers in detail: the `platform-agents-oncall` rotation, T1/T2/T3 tiers, 15- and 30-minute response times. |
-| **Sam** | Refuses, and names what it *does* have: "the only corpus available to me is the public LangChain product documentation." |
+| **Lang** | Answers in detail: the `platform-agents-oncall` rotation, T1/T2/T3 tiers, 15- and 30-minute response times. |
+| **Polly** | Refuses, and names what it *does* have: "the only corpus available to me is the public LangChain product documentation." |
 
-Say plainly: *Sam's model was never offered a tool that can reach those
+Say plainly: *Polly's model was never offered a tool that can reach those
 runbooks.* It is not declining; it cannot. Then show the ✗ row in the left
 rail — that row was on screen before the question was asked.
 
-Reference runs — [Dana](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-50e9-7323-ac77-fb5dd52dfd8f) ·
-[Sam](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-51a5-7bb3-89ca-5f154d4de79d)
+Reference runs — [Lang](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-50e9-7323-ac77-fb5dd52dfd8f) ·
+[Polly](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-51a5-7bb3-89ca-5f154d4de79d)
 
 ### Spare — if the room wants something else
 
 > **"What environments do we have?"**
 
-Dana gets a four-row table (`dev`, `staging`, `prod-us`, `prod-eu`) from
-`environments.md`. Sam gets a list of *environment variables* from
+Lang gets a four-row table (`dev`, `staging`, `prod-us`, `prod-eu`) from
+`environments.md`. Polly gets a list of *environment variables* from
 `environment.md` and says the docs describe no deployment environments.
 Verified stable across three runs per role.
 
-Reference runs — [Dana](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-0946-7310-8153-3e3209e62009) ·
-[Sam](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-0f6a-7380-b17d-6df3da91ae3b)
+Reference runs — [Lang](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-0946-7310-8153-3e3209e62009) ·
+[Polly](https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-0f6a-7380-b17d-6df3da91ae3b)
 
 ### What to point at, in order
 
-1. **The left rail, before asking.** Dana's list is numbered 1–2. Sam's has a
+1. **The left rail, before asking.** Lang's list is numbered 1–2. Polly's has a
    crossed-out row. The difference is visible before anything runs.
 2. **The chips, during the run.** `engineeringDocs__fetch_doc
    resilience-standards.md` — the corpus *and* the page.
@@ -186,10 +186,10 @@ root run.
   ticket prefixes. It is in a private Context Hub repo, so "only the engineer
   role can reach this" is literally true, but the content is written, not
   leaked.
-- **Do not claim Dana's *preference* for the runbooks is enforced.** Two
+- **Do not claim Lang's *preference* for the runbooks is enforced.** Two
   different things are on screen:
-  - Sam's missing tool — **enforced**, in code, unbypassable.
-  - Dana's ordering (runbooks first) — **a sentence in the prompt.** Dana can
+  - Polly's missing tool — **enforced**, in code, unbypassable.
+  - Lang's ordering (runbooks first) — **a sentence in the prompt.** Lang can
     reach the product docs too; grants are nested.
 
   Beat 2 is the enforced one. Lead with the mechanism there.

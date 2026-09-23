@@ -57,6 +57,10 @@ code, kbd, .mono {
   font-weight: 600;
   font-size: 16px;
 }
+/* The warning takes the space; the view toggle is pushed to the far right.
+ * At narrow widths the text wraps rather than squeezing the toggle, because
+ * the toggle is the control and the text is the label. */
+.banner .bannertext { flex: 1 1 auto; min-width: 0; }
 
 .layout {
   display: grid;
@@ -66,6 +70,12 @@ code, kbd, .mono {
   max-width: 1500px;
   margin: 0 auto;
   align-items: start;
+}
+/* Compare mode has no left rail — see page.tsx. One column, and wider, so
+ * two transcripts side by side still have room at projection size. */
+.layout.wide {
+  grid-template-columns: 1fr;
+  max-width: 1800px;
 }
 @media (max-width: 1000px) {
   .layout { grid-template-columns: 1fr; }
@@ -330,21 +340,38 @@ code, kbd, .mono {
 @media (max-width: 1100px) { .compare { grid-template-columns: 1fr; } }
 .compare > section { min-width: 0; }
 .compare h3 {
-  margin: 0 0 10px; font-size: 17px;
-  display: flex; align-items: center; gap: 10px;
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  font-size: 18px;
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
 }
 .compare .sub { font-size: 14px; font-weight: 500; color: var(--muted); }
 
-.modeswitch { display: flex; gap: 8px; }
-.modeswitch a[role="button"],
-.modeswitch button {
-  text-decoration: none;
-  display: inline-block;
-  font: inherit; font-size: 15px; padding: 8px 14px;
-  color: var(--muted); background: var(--panel-2);
-  border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer;
+/* --- view toggle, top right ---------------------------------------------
+ * A segmented control rather than two separate buttons: the two views are
+ * exclusive, and a segmented pair says that without a label. */
+.modeswitch {
+  flex: none;
+  margin-left: auto;
+  display: flex;
+  border: 1px solid #66520f;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.25);
 }
-.modeswitch a[role="button"][aria-pressed="true"],
-.modeswitch button[aria-pressed="true"] {
-  color: var(--text); border-color: var(--accent); background: #10283a; font-weight: 600;
+.modeswitch a {
+  padding: 6px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  color: #c9a227;
+  white-space: nowrap;
+}
+.modeswitch a + a { border-left: 1px solid #66520f; }
+.modeswitch a:hover { color: var(--warn); background: rgba(255, 255, 255, 0.05); }
+.modeswitch a[aria-current="page"] {
+  background: var(--warn);
+  color: #2a2003;
 }

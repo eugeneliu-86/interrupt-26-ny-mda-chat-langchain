@@ -306,7 +306,7 @@ from contracts.roles import Role
 class RequestContext:
     """Per-run context set by the UI's server route. Carries no content."""
     role: Role
-    display_name: str          # "Dana (Engineer)" — for the trace, not for auth
+    display_name: str          # "Lang (Engineer)" — for the trace, not for auth
     demo_version: str          # C9
 ```
 
@@ -316,7 +316,7 @@ Passed as the top-level `context` field on run create:
 {
   "assistant_id": "role-aware-docs-assistant",
   "input": {"messages": [{"role": "user", "content": "..."}]},
-  "context": {"role": "engineer", "display_name": "Dana (Engineer)",
+  "context": {"role": "engineer", "display_name": "Lang (Engineer)",
               "demo_version": "v1"},
   "stream_mode": ["messages-tuple", "updates"]
 }
@@ -527,7 +527,7 @@ Every root run carries, in `metadata`:
 
 ```python
 {"demo": "role-aware-docs", "demo_version": "v4",        # static, from the build
- "role": "engineer", "display_name": "Dana · Engineer"}  # mirrored from context
+ "role": "engineer", "display_name": "Lang · Engineer"}  # mirrored from context
 ```
 
 **Both halves arrive without middleware**, which took two corrections to learn:

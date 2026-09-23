@@ -70,8 +70,8 @@ PRIMARY_ORDER: dict[Role, tuple[str, ...]] = {
 
 #: role -> the label the UI shows. Display only; never an authorization input.
 ROLE_LABELS: dict[Role, str] = {
-    "engineer": "Dana · Engineer",
-    "employee": "Sam · Employee",
+    "engineer": "Lang · Engineer",
+    "employee": "Polly · Employee",
 }
 
 # --- invariants -------------------------------------------------------------

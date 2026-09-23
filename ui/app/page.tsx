@@ -45,13 +45,15 @@ export default async function Page({
 
   return (
     <>
-      {/* C5. Sticky, and never conditional. */}
+      {/* C5. Sticky, and never conditional — including in compare mode,
+          where everything else in the chrome goes away. */}
       <div className="banner">
         <span aria-hidden>⚠</span>
-        <span>
+        <span className="bannertext">
           Simulated identity — nobody is authenticated. The role is chosen from
           a menu and injected server-side.
         </span>
+        {compareEnabled && <ModeSwitch compare={wantCompare} />}
       </div>
 
       {!configured && (
@@ -65,20 +67,27 @@ export default async function Page({
         </div>
       )}
 
-      <main className="layout">
-        <aside>
-          <IdentityPicker current={role} />
-          <GrantsPanel role={role} />
-          {compareEnabled && <ModeSwitch compare={wantCompare} />}
-          <div className="panel">
-            <h2>Deployment</h2>
-            <p className="note">
-              One agent, <code>role-aware-docs-assistant</code>, build{" "}
-              <strong>{DEMO_VERSION}</strong>. Both identities call the same
-              model; only the tool surface differs.
-            </p>
-          </div>
-        </aside>
+      {/* COMPARE MODE DROPS THE LEFT RAIL ENTIRELY. Both identities are
+          running, so a single identity's grants panel would be describing
+          one of the two panes and the picker would be choosing something
+          nothing reads. Each pane carries its own heading and its own ✗
+          count instead, and the two get the full width — which is what they
+          need at projection size. */}
+      <main className={wantCompare ? "layout wide" : "layout"}>
+        {!wantCompare && (
+          <aside>
+            <IdentityPicker current={role} />
+            <GrantsPanel role={role} />
+            <div className="panel">
+              <h2>Deployment</h2>
+              <p className="note">
+                One agent, <code>role-aware-docs-assistant</code>, build{" "}
+                <strong>{DEMO_VERSION}</strong>. Both identities call the same
+                model; only the tool surface differs.
+              </p>
+            </div>
+          </aside>
+        )}
 
         <div>
           {wantCompare ? (

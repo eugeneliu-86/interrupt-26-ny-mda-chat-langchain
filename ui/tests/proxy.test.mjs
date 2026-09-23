@@ -424,3 +424,58 @@ test("the UI reports the same build the agent does", { skip }, async () => {
     `the page does not show ${grants.demo_version}`,
   );
 });
+
+// --- the two views are different layouts, not just different panes --------
+
+test("the view toggle is in the top bar, next to the simulated-identity label", {
+  skip,
+}, async () => {
+  const home = await (await fetch(base)).text();
+  if (!home.includes("Side by side")) {
+    console.log("    compare mode is OFF for this server — no toggle to place");
+    return;
+  }
+  // It has to live in the banner: compare mode removes the left rail, so a
+  // toggle in the rail would delete the control that gets you back.
+  const banner = /<div class="banner">([\s\S]*?)<\/div>\s*<main/.exec(home);
+  assert.ok(banner, "could not find the banner");
+  assert.match(banner[1], /modeswitch/, "the toggle is not in the top bar");
+  assert.match(banner[1], /Simulated identity/, "the C5 label left the banner");
+});
+
+test("compare mode drops the single-identity rail", { skip }, async () => {
+  const home = await (await fetch(base)).text();
+  if (!home.includes("Side by side")) return;
+
+  const one = await (await fetch(base)).text();
+  const both = await (await fetch(`${base}/?mode=compare`)).text();
+
+  // One identity: the rail is the whole point.
+  assert.match(one, /can search/, "the grants panel vanished from the single view");
+  assert.ok(!one.includes("layout wide"), "the single view went full width");
+
+  // Side by side: a single identity's grants panel would be describing one
+  // of two panes, and the picker would be choosing something nothing reads.
+  assert.ok(!both.includes("can search"), "the grants panel survived into compare mode");
+  assert.ok(!both.includes(">Identity<"), "the identity picker survived into compare mode");
+  assert.match(both, /layout wide/, "compare mode did not go full width");
+
+  // C5 is never conditional, in either view.
+  for (const [name, html] of [["one", one], ["compare", both]]) {
+    assert.match(html, /Simulated identity/, `the C5 banner is missing in the ${name} view`);
+  }
+});
+
+test("the identities are named from grants.json, not hardcoded here", { skip }, async () => {
+  const { readFileSync } = await import("node:fs");
+  const grants = JSON.parse(
+    readFileSync(new URL("../../agent/contracts/grants.json", import.meta.url), "utf8"),
+  );
+  const home = await (await fetch(base)).text();
+  for (const role of Object.keys(grants.roles)) {
+    assert.ok(
+      home.includes(grants.roles[role].label),
+      `the page does not show ${grants.roles[role].label}`,
+    );
+  }
+});
