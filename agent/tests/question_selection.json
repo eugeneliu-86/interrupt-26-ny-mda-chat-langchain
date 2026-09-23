@@ -1,0 +1,420 @@
+{
+  "runs": 3,
+  "candidates": {
+    "A": {
+      "question": "Do we require retry middleware on model calls?",
+      "c1_both_answer": true,
+      "c3_answers_differ": true,
+      "c3_pages_differ": true,
+      "c4_engineer_prefers_runbooks": "3/3",
+      "c4_pass": true,
+      "stable_across_runs": true,
+      "verdict": "BEAT 1",
+      "engineer": [
+        {
+          "prefixes": [
+            "engineeringDocs"
+          ],
+          "pages": [
+            "engineeringDocs/agent-code-standards.md",
+            "engineeringDocs/eval-gate.md",
+            "engineeringDocs/resilience-standards.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e2bd-7750-82f4-2dd4504b0332",
+          "text": "Yes. **Retry middleware is required on every model call.** The internal resilience standard says providers can return 429s during normal operation, and calls without retries can turn routine back-pressure into an outage.\n\nSource: **Internal engineering runbooks \u2014 `resilience-standards.md`**, \u201cRequired\u201d section."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs"
+          ],
+          "pages": [
+            "engineeringDocs/resilience-standards.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e2b7-7840-b8b8-20c04d63296c",
+          "text": "Yes. **Retry middleware is required on every model call.** The runbook says providers commonly return rate limits (429s), and calls without retries can treat routine back-pressure as an outage.\n\nSource: **Internal engineering runbooks \u2014 `resilience-standards.md`**, \u201cRequired\u201d section."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs"
+          ],
+          "pages": [
+            "engineeringDocs/agent-code-standards.md",
+            "engineeringDocs/eval-gate.md",
+            "engineeringDocs/resilience-standards.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e619-7833-a2c9-a92e5133aa0a",
+          "text": "Yes. **Retry middleware is required on every model call.** The internal resilience standard says providers can return rate limits and transient failures during normal operation, and calls without retries treat routine back-pressure as an outage.\n\nIt also explicitly forbids calling a model in a tight loop without retries.\n\nSource: **Internal engineering runbook \u2014 `resilience-standards.md`**."
+        }
+      ],
+      "employee": [
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/middleware.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e291-7f23-b381-180e9666ad7a",
+          "text": "No requirement is stated in the available documentation. The LangChain docs describe retry middleware as an available cross-cutting capability for agent model and tool calls\u2014not as mandatory for every model call.\n\nSource: public LangChain product documentation, [`middleware.md`](middleware.md)."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/middleware.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e61f-7590-8c4d-3f83865d54c3",
+          "text": "No. The LangChain documentation describes retry middleware as a supported use case for adding retry behavior around an agent\u2019s model and tool calls, but it does not state that retry middleware is required for model calls.\n\nSource: public LangChain product documentation, [`middleware.md`](middleware.md)."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/middleware.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e288-7f82-944f-794646f59cdd",
+          "text": "No. The LangChain documentation does **not** state that retry middleware is required on model calls.\n\nIt presents retry behavior as an optional cross-cutting capability of `AgentMiddleware`, alongside fallbacks, guardrails, human-in-the-loop, and structured output. The docs describe middleware as something you can add without modifying the agent, not as a mandatory requirement.\n\nSource: **public LangChain product documentation**, [`middleware.md`](middleware.md)."
+        }
+      ]
+    },
+    "B": {
+      "question": "How should agent code be structured and reviewed?",
+      "c1_both_answer": true,
+      "c3_answers_differ": true,
+      "c3_pages_differ": true,
+      "c4_engineer_prefers_runbooks": "3/3",
+      "c4_pass": true,
+      "stable_across_runs": false,
+      "verdict": "reject",
+      "engineer": [
+        {
+          "prefixes": [
+            "engineeringDocs"
+          ],
+          "pages": [
+            "engineeringDocs/agent-code-standards.md",
+            "engineeringDocs/deploy-to-production.md",
+            "engineeringDocs/eval-gate.md",
+            "engineeringDocs/incident-review.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e2b4-7400-8dd4-c25fd75ab957",
+          "text": "Agent code should follow the framework\u2019s native abstractions and be reviewed based on runtime behavior, not just source diffs.\n\n### Structure the code\n\n- Build agents with the framework\u2019s **agent constructor or graph API**; do not hand-roll tool-calling loops. Native constructs preserve retries, streaming, checkpointing, and tracing.\n- Use **structured output** whenever downstream code parses the result. Avoid parsing free-form prose.\n- Nodes should **return new state** rather than mutate the state object in place, since reducers merge returned values and in-place updates can be lost under concurrency.\n- Keep the always-on system prompt short. Retrieve documents instead of embedding whole corpora, and put conditional instructions in on-demand skills.\n\nSource: internal engineering runbook, [`agent-code-standards.md`](agent-code-standards.md).\n\n### Review the change\n\n1. Run the agent\u2019s versioned regression dataset, `plat-<agent>-regression`, through `agent-checks` for every change touching the prompt, tools, middleware, or model.\n2. Require the eval gate to pass:\n   - no previously passing case fails;\n   - the overall score does not drop;\n   - new behavior has at least one test case.\n3. Assert behavior\u2014such as which tools were called and what was cited\u2014rather than exact wording.\n4. Review a trace from the changed agent in addition to the diff. The trace shows what the agent actually did.\n5. Require **two approvals** for changes to a prompt, tool behavior, or middleware chain. One approval is sufficient for tests, comments, and documentation.\n\nSources: internal engineering runbooks, [`eval-gate.md`](eval-gate.md) and [`agent-code-standards.md`](agent-code-standards.md).\n\nFor deployment-related review, also require a `PLAT-` change ticket, staging validation with trace review, and a second engineer\u2019s approval before promotion, as specified in [`deploy-to-production.md`](deploy-to-production.md)."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs",
+            "productDocs"
+          ],
+          "pages": [
+            "engineeringDocs/agent-code-standards.md",
+            "engineeringDocs/incident-review.md",
+            "productDocs/deep-agents.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e277-7ef1-b324-e030062db664",
+          "text": "According to the **internal engineering runbook** (`agent-code-standards.md`), agent code should be structured around the framework rather than custom orchestration:\n\n### Structure\n\n- Build agents with the framework\u2019s **agent constructor or graph API**; do not hand-roll tool-calling loops.\n- Use **structured output** whenever downstream code parses the result instead of parsing model prose.\n- Have each node **return new state**. Do not mutate the state object in place, because reducer-based merging can lose in-place updates under concurrency.\n- Keep the always-on system prompt short.\n- Retrieve documents when needed rather than placing entire documents in the system prompt.\n- Put conditional instructions in skills loaded on demand rather than in every request.\n\n### Review\n\n- Changes to a **prompt**, a **tool\u2019s behavior**, or the **middleware chain** require **two approvals**.\n- Changes limited to tests, comments, or documentation require **one approval**.\n- Reviewers must inspect a **trace produced by the change**, not just the code diff; the diff alone does not show how the agent will behave.\n\nSource: **Internal engineering runbooks**, [`agent-code-standards.md`](agent-code-standards.md).\n\nFor production incidents, the internal [`incident-review.md`](incident-review.md) additionally requires a blameless review based on trace timestamps, the user-visible experience, detection, cause, contributing factors, and owner-assigned `PLAT-` action tickets. It also requires a regression eval case and a runbook fix."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs"
+          ],
+          "pages": [
+            "engineeringDocs/agent-code-standards.md",
+            "engineeringDocs/deploy-to-production.md",
+            "engineeringDocs/eval-gate.md",
+            "engineeringDocs/incident-review.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e2a8-7943-bee8-686613b87b02",
+          "text": "According to the **internal engineering runbooks**, structure agent code around the framework and make behavior observable and testable.\n\n### Structure\n\n- **Use the framework\u2019s agent constructor or graph API** rather than hand-rolling a tool-calling loop. This preserves built-in retries, streaming, checkpointing, and tracing.\n- **Use structured output** whenever downstream code parses the result; do not rely on parsing prose.\n- **Return new state from each node** instead of mutating the existing state object. The framework\u2019s reducer merges returned values, while in-place mutation can lose updates under concurrency.\n- **Keep the always-on prompt short.** Retrieve documents instead of embedding entire documents in the system prompt, and put conditional instructions in skills loaded on demand.\n\nSource: **Internal engineering runbooks \u2014 `agent-code-standards.md`**.\n\n### Review\n\nFor any change affecting a prompt, tool behavior, or middleware chain:\n\n1. Require **two approvals**. One approval is sufficient for tests, comments, and documentation changes.\n2. Have the reviewer inspect a **trace produced by the change**, not just the diff. The diff alone does not show how the agent behaves at runtime.\n3. Run the agent\u2019s versioned regression dataset, `plat-<agent>-regression`, on every pull request touching the prompt, tools, middleware, or model.\n4. Treat the eval gate as passing only when:\n   - no previously passing case now fails,\n   - the overall score does not drop, and\n   - new behavior has at least one test case.\n5. Assert observable behavior\u2014such as which tools were called and what was cited\u2014rather than exact response wording.\n6. Add a regression case for every production incident that produced a wrong answer.\n\nSources: **Internal engineering runbooks \u2014 `agent-code-standards.md` and `eval-gate.md`**."
+        }
+      ],
+      "employee": [
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e280-7642-bbae-de024c1704f3",
+          "text": "I don\u2019t have access to documentation covering how agent code should be structured and reviewed. The only corpus available in this run is the **public LangChain product documentation**, and searches for agent code structure, testing, evaluation, and review returned no matching pages."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e2b4-7400-8dd4-c240061ed2b8",
+          "text": "I can\u2019t answer this from the available documentation. The only corpus I can search is **public LangChain product documentation**, and it does not contain pages matching agent code structure or code-review practices."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/deep-agents.md",
+            "productDocs/evaluation.md",
+            "productDocs/langchain.md",
+            "productDocs/langgraph.md",
+            "productDocs/langsmith.md",
+            "productDocs/middleware.md",
+            "productDocs/tracing.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd5-e27d-74c1-84e9-811c293ce94a",
+          "text": "According to the **public LangChain product documentation**, structure agent code around clear orchestration boundaries and review it with both automated evaluations and production traces.\n\n## Recommended structure\n\n1. **Keep orchestration separate from business logic**\n   - For stateful or multi-step workflows, model the agent as a **LangGraph**: nodes contain functions, edges define control flow, and a typed state object is passed between nodes. This makes transitions and state changes explicit.  \n     \u2014 *LangGraph*, public LangChain product documentation: `langgraph.md`\n\n2. **Keep tools narrowly scoped**\n   - Treat tools as explicit interfaces the agent can call, rather than embedding external-system logic directly in the model loop. LangChain is intended to compose LLM calls with tools, memory, and structured outputs.  \n     \u2014 *LangChain*, public LangChain product documentation: `langchain.md`\n\n3. **Put cross-cutting behavior in middleware**\n   - Use middleware for retries, fallbacks, guardrails, human approval, and structured-output handling instead of modifying the core agent logic for each concern.\n   - Middleware can be stacked, but its order matters, so make that order deliberate and review it as part of the agent\u2019s behavior.  \n     \u2014 *Middleware*, public LangChain product documentation: `middleware.md`\n\n4. **Use explicit planning and isolation for long-running agents**\n   - For research, coding, or other long-horizon tasks, Deep Agents adds a todo-list planner, virtual filesystem, and subagent middleware for context isolation.  \n     \u2014 *Deep Agents*, public LangChain product documentation: `deep-agents.md`\n\nA practical conceptual layout would therefore be:\n\n```text\nagent/\n  state.py          # typed state\n  graph.py          # nodes, edges, entry/exit points\n  tools/            # narrowly scoped external actions\n  middleware/       # retries, guardrails, approvals\n  prompts/          # prompts and structured-output schemas\n  evaluations/      # datasets and evaluator functions\n  observability/    # tracing configuration\n```\n\nThe documentation establishes the architectural responsibilities above, but it does **not** prescribe this exact directory layout.\n\n## How to review the code\n\n### 1. Review control flow and state\n\nFor graph-based agents, verify:\n\n- Each node has a focused responsibility.\n- State fields are explicit and typed.\n- Every edge and termination condition is understandable.\n- Long-running or resumable behavior uses the graph\u2019s persistence and interrupt capabilities where appropriate.  \n  \u2014 *LangGraph*, public LangChain product documentation: `langgraph.md`\n\n### 2. Review tool and middleware boundaries\n\nCheck that:\n\n- Tools expose only the capabilities the agent needs.\n- Retries and fallbacks do not cause unsafe repeated side effects.\n- Guardrails and human approvals are implemented as middleware where possible.\n- Middleware ordering is intentional, because stacking order affects behavior.  \n  \u2014 *Middleware*, public LangChain product documentation: `middleware.md`\n\n### 3. Add offline evaluations before approving changes\n\nThe documented offline evaluation workflow is:\n\n1. Create a dataset in LangSmith.\n2. Write an evaluator\u2014either LLM-as-judge or pure code\u2014that returns a key and score.\n3. Run the target agent against the dataset with `langsmith.evaluate`.  \n   \u2014 *Evaluation*, public LangChain product documentation: `evaluation.md`\n\nUse this to review changes to prompts, tools, routing, state transitions, and middleware behavior rather than relying only on unit tests.\n\n### 4. Inspect traces during review\n\nEnable LangSmith tracing so every LLM, tool, and chain call can be inspected. For arbitrary Python functions, use `@traceable`. Traces help reviewers see the actual tool sequence, latency, failures, and model decisions.  \n\u2014 *Tracing*, public LangChain product documentation: `tracing.md`\n\n### 5. Include production and human feedback\n\nFor deployed agents:\n\n- Add online evaluation rules so new traces are scored automatically.\n- Use LangSmith annotation queues when human review is needed.  \n  \u2014 *Evaluation* and *LangSmith*, public LangChain product documentation: `evaluation.md`, `langsmith.md`\n\nIn short: **make control flow and state explicit, isolate tools and cross-cutting policies, then review behavior through repeatable evaluations and traces\u2014not just source-code inspection.** The available documentation does not provide a formal pull-request checklist or organization-specific review policy."
+        }
+      ]
+    },
+    "C": {
+      "question": "What environments do we have?",
+      "c1_both_answer": true,
+      "c3_answers_differ": true,
+      "c3_pages_differ": true,
+      "c4_engineer_prefers_runbooks": "3/3",
+      "c4_pass": true,
+      "stable_across_runs": true,
+      "verdict": "BEAT 1",
+      "engineer": [
+        {
+          "prefixes": [
+            "engineeringDocs"
+          ],
+          "pages": [
+            "engineeringDocs/environments.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-0946-7310-8153-3e3209e62009",
+          "text": "We have four environments, according to the **internal engineering runbook** (`environments.md`):\n\n| Environment | Purpose | Who deploys | Data |\n|---|---|---|---|\n| `dev` | Individual development; can be freely recreated | Anyone on the team | Synthetic only |\n| `staging` | Pre-production verification; mirrors `prod-us` configuration | Anyone on the team | Synthetic only |\n| `prod-us` | US production | `deploy-agents` pipeline only | Real |\n| `prod-eu` | EU production; deployed after `prod-us` | `deploy-agents` pipeline only | Real, and must remain in the EU region |\n\nKey constraints: no real data in `dev` or `staging`, no manual production deployments, and `prod-eu` data must not be copied to other environments."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs"
+          ],
+          "pages": [
+            "engineeringDocs/environments.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-0bd7-71d1-a7bb-7a6f50362998",
+          "text": "We have four environments, documented in the internal engineering runbook [Environments](environments.md):\n\n| Environment | Purpose | Deployment | Data |\n|---|---|---|---|\n| `dev` | Individual development; can be freely recreated | Anyone on the team | Synthetic only |\n| `staging` | Pre-production verification; mirrors `prod-us` configuration | Anyone on the team | Synthetic only |\n| `prod-us` | US production | `deploy-agents` pipeline only | Real |\n| `prod-eu` | EU production; deployed after `prod-us` | `deploy-agents` pipeline only | Real, must remain in the EU region |\n\nKey constraints: no real data in `dev` or `staging`, no manual production deployments, and `prod-eu` data must not be copied to other environments."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs"
+          ],
+          "pages": [
+            "engineeringDocs/environments.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-0dc4-7990-8742-5557cd4399d1",
+          "text": "We have four environments:\n\n| Environment | Purpose | Deployment | Data |\n|---|---|---|---|\n| `dev` | Individual development; can be freely recreated | Anyone on the team | Synthetic only |\n| `staging` | Pre-production verification; mirrors `prod-us` configuration | Anyone on the team | Synthetic only |\n| `prod-us` | US production | `deploy-agents` pipeline only | Real |\n| `prod-eu` | EU production; deployed after `prod-us` | `deploy-agents` pipeline only | Real, must remain in the EU region |\n\nKey constraints: production must never be deployed to by hand; real data cannot be used in `dev` or `staging`; and `prod-eu` data must not be copied to any other environment.\n\nSource: **Internal engineering runbook**, [`environments.md`](environments.md)."
+        }
+      ],
+      "employee": [
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/environment.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-0f6a-7380-b17d-6df3da91ae3b",
+          "text": "The documentation does not list separate deployment environments such as development, staging, or production.\n\nIt does describe the environment variables for a typical LangChain + LangSmith app:\n\n- `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`\n- `LANGSMITH_API_KEY`\n- `LANGSMITH_TRACING=true`\n- `LANGSMITH_PROJECT=my-project`\n\nSource: public LangChain product documentation, [`environment.md`](environment.md)."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/environment.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-2027-7602-825e-0f145b69e438",
+          "text": "The public LangChain documentation describes a typical app environment with these variables:\n\n- `ANTHROPIC_API_KEY` \u2014 or another provider key such as `OPENAI_API_KEY`\n- `LANGSMITH_API_KEY`\n- `LANGSMITH_TRACING=true` \u2014 enables tracing for every run\n- `LANGSMITH_PROJECT=my-project` \u2014 the project is auto-created on the first trace\n\nIt recommends loading them with `python-dotenv` using `load_dotenv(override=True)`.\n\nSource: [`environment.md`](environment.md), public LangChain product documentation.\n\nThe available documentation does not specify separate deployment environments such as development, staging, or production."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/environment.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-230a-71a0-adbf-c261fddfacf4",
+          "text": "The public LangChain documentation does not list separate environments such as development, staging, or production.\n\nIt describes a typical application environment configured with:\n\n- A model provider API key, such as `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`\n- `LANGSMITH_API_KEY`\n- `LANGSMITH_TRACING=true`\n- `LANGSMITH_PROJECT`, which identifies the LangSmith project\n\nSource: [`environment.md`](environment.md), public LangChain product documentation."
+        }
+      ]
+    },
+    "D": {
+      "question": "What timeout should I use for a model call?",
+      "c1_both_answer": true,
+      "c3_answers_differ": true,
+      "c3_pages_differ": true,
+      "c4_engineer_prefers_runbooks": "3/3",
+      "c4_pass": true,
+      "stable_across_runs": true,
+      "verdict": "BEAT 1",
+      "engineer": [
+        {
+          "prefixes": [
+            "engineeringDocs",
+            "productDocs"
+          ],
+          "pages": [
+            "engineeringDocs/resilience-standards.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-2314-78f0-8665-8b472449ac51",
+          "text": "The available documentation does **not specify a numeric timeout for model calls**, so I can\u2019t recommend an exact value from the granted sources.\n\nThe internal **Resilience standards** runbook requires:\n\n- Retry middleware on every model call.\n- A timeout on every external tool call.\n\nIt does not define a model-call timeout or a method for choosing one. **Source:** internal engineering runbooks, [`resilience-standards.md`](resilience-standards.md).\n\nThe public LangChain documentation also had no matching guidance on model-call timeouts."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs",
+            "productDocs"
+          ],
+          "pages": [
+            "engineeringDocs/resilience-standards.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-2621-72b0-b693-9ca0964a261c",
+          "text": "Use a timeout on every model call, but the available runbooks do **not specify a universal duration**.\n\nSet it according to your latency requirements and provider\u2019s expected response time, then monitor and tune it. The internal resilience standard specifically requires a timeout for every external call to prevent slow upstreams from hanging the agent.\n\nIt also requires retry middleware on every model call, since provider rate limits such as HTTP 429s are considered normal operational behavior.\n\nSource: **Internal engineering runbook \u2014 `resilience-standards.md`**."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs",
+            "productDocs"
+          ],
+          "pages": [
+            "engineeringDocs/resilience-standards.md",
+            "productDocs/middleware.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-267b-7023-a237-61f444242f33",
+          "text": "The available runbook does **not specify a numeric timeout for model calls**, so I can\u2019t recommend a particular value from the accessible documentation.\n\nIt does require:\n\n- **Retry middleware on every model call**, because provider `429` responses are considered normal back-pressure.\n- **A timeout on every external tool call** to prevent slow upstreams from hanging the agent.\n\nSource: **internal engineering runbook**, [`resilience-standards.md`](resilience-standards.md). The public LangChain documentation also describes middleware for retries and fallbacks, but does not specify a timeout value: [`middleware.md`](middleware.md)."
+        }
+      ],
+      "employee": [
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-27b2-7dc0-b306-f992fc9958fa",
+          "text": "I don\u2019t have enough documentation coverage to recommend a specific timeout. The available corpus is **public LangChain product documentation**, but searches for model-call timeout guidance returned no matching pages.\n\nIf you\u2019re configuring a LangChain model, the appropriate value depends on the provider, model, streaming behavior, and expected latency; I can\u2019t state a documented default or recommendation from the available sources."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-2808-76a0-8ad6-96633bb09c88",
+          "text": "I don\u2019t have documentation in the available **public LangChain product documentation** corpus that specifies a recommended timeout for model calls.\n\nThe appropriate value depends on factors such as the model provider, streaming versus non-streaming, expected prompt/output size, and your application\u2019s latency requirements. I can\u2019t make a documentation-backed recommendation from the corpus available to me."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-2ac6-7db3-96b1-91b34a407ada",
+          "text": "I couldn\u2019t find guidance on choosing a timeout for model calls in the public LangChain product documentation available to me. That documentation corpus doesn\u2019t cover this question, so I can\u2019t recommend a value reliably from the permitted sources."
+        }
+      ]
+    },
+    "E": {
+      "question": "How do I deploy a managed deep agent?",
+      "c1_both_answer": true,
+      "c3_answers_differ": true,
+      "c3_pages_differ": true,
+      "c4_engineer_prefers_runbooks": "3/3",
+      "c4_pass": true,
+      "stable_across_runs": true,
+      "verdict": "BEAT 1",
+      "engineer": [
+        {
+          "prefixes": [
+            "engineeringDocs",
+            "productDocs"
+          ],
+          "pages": [
+            "engineeringDocs/deploy-to-production.md",
+            "productDocs/deep-agents.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-2b01-7b61-b0de-68a670157796",
+          "text": "The available documentation does not describe a managed deep-agent-specific deployment command or configuration. It does provide:\n\n1. **Deep Agents overview** \u2014 Public LangChain documentation describes Deep Agents as the `deepagents` package, built around planning, a virtual filesystem, and subagents.  \n   Source: `deep-agents.md` \u2014 **public LangChain product documentation**\n\n2. **Required production deployment process** \u2014 For agents owned by Platform Agents:\n   1. Open a `PLAT-` change ticket for the deploy.\n   2. Ensure `agent-checks` pass on the commit.\n   3. Pass the eval gate.\n   4. Bump the agent version counter if behavior changes.\n   5. Deploy to `staging`.\n   6. Run smoke questions and inspect the traces.\n   7. Promote through the `deploy-agents` pipeline, with approval from a second engineer.\n   8. Deploy `prod-us`, wait for a clean run, then deploy `prod-eu`.\n   9. Post the ticket and revision in `#platform-agents-releases`.\n\n   Source: `deploy-to-production.md` \u2014 **internal engineering runbooks**\n\nThe internal runbook also prohibits production deploys after **14:00 UTC on Fridays** or during an active Tier-2 incident, except for break-glass deployments.\n\nI don\u2019t have documentation covering the specific managed-deep-agent platform workflow, such as its deployment command, configuration file, or hosting setup. The available corpora are the **internal engineering runbooks** and **public LangChain product documentation**."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs",
+            "productDocs"
+          ],
+          "pages": [
+            "engineeringDocs/deploy-to-production.md",
+            "productDocs/deep-agents.md",
+            "productDocs/deployment.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-2cdb-75c0-96a7-547554ab31de",
+          "text": "The available documentation does not describe a separate \u201cmanaged deep agent\u201d deployment workflow. It covers deploying a Deep Agent as a LangGraph application, plus internal production requirements.\n\n1. **Build your Deep Agent.** Deep Agents use the `deepagents` package and provide planning, a virtual filesystem, and subagent support.  \n   Source: public LangChain docs, [`deep-agents.md`](deep-agents.md)\n\n2. **Expose the compiled graph** from your project and add a `langgraph.json` at the project root pointing to it.\n\n3. **Declare dependencies** in `pyproject.toml` or `requirements.txt`.\n\n4. **Deploy through LangSmith** using **Deployments \u2192 New**, or use the `langgraph` CLI.  \n   Source: public LangChain docs, [`deployment.md`](deployment.md)\n\n5. **For an internal production deployment**, also:\n   - Open a `PLAT-` change ticket.\n   - Ensure `agent-checks` and the eval gate pass.\n   - Deploy to `staging` first and inspect smoke-test traces.\n   - Promote through the `deploy-agents` pipeline with a second engineer\u2019s approval.\n   - Deploy `prod-us`, wait for one clean run, then deploy `prod-eu`.\n   - Post the ticket and revision in `#platform-agents-releases`.  \n   Source: internal engineering runbook, [`deploy-to-production.md`](deploy-to-production.md)\n\nThe deployment platform provides persistence, WebSocket streaming, background runs, crons, and authentication hooks. [`deployment.md`](deployment.md) does not specify the exact CLI command or how to convert a particular Deep Agent definition into the compiled graph referenced by `langgraph.json`."
+        },
+        {
+          "prefixes": [
+            "engineeringDocs",
+            "productDocs"
+          ],
+          "pages": [
+            "engineeringDocs/deploy-to-production.md",
+            "engineeringDocs/environments.md",
+            "productDocs/deep-agents.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-39e1-78c3-9a28-fe777471ec9f",
+          "text": "I can\u2019t find documentation for the specific **managed deep-agent deployment mechanism**. The available docs cover:\n\n- **Deep Agents** as the `deepagents` package, but do not describe managed deployment: public LangChain docs, [`deep-agents.md`](deep-agents.md).\n- **Internal production deployment requirements** for Platform Agents: internal engineering runbook, [`deploy-to-production.md`](deploy-to-production.md).\n\nFor an agent owned by Platform Agents, follow this deployment process:\n\n1. Open a `PLAT-` change ticket\u2014one ticket per deploy.\n2. Ensure `agent-checks` is green on the commit you will ship.\n3. Pass the eval gate described in `eval-gate.md`.\n4. If behavior changes, bump the agent\u2019s version counter in the same commit.\n5. Deploy to `staging`, including prompt-only changes.\n6. Run smoke questions against staging and inspect the traces.\n7. Promote using the `deploy-agents` pipeline. A second engineer must approve the `PLAT-` ticket; self-approval is blocked.\n8. Deploy to `prod-us`, wait for one clean run, then deploy to `prod-eu`. Do not deploy both regions simultaneously.\n9. Post the ticket and revision in `#platform-agents-releases`.\n\nDo not deploy after **14:00 UTC on Fridays** or during an active Tier-2 incident. Production changes must not be performed by hand; use the pipeline or the documented break-glass procedure.\n\nThe missing piece is the actual managed-platform configuration or command for registering/deploying a `deepagents` application."
+        }
+      ],
+      "employee": [
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/deep-agents.md",
+            "productDocs/deployment.md",
+            "productDocs/installation.md",
+            "productDocs/langgraph.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-464b-7c41-83cc-4578f09c3e02",
+          "text": "To deploy a managed deep agent, use the LangGraph Platform:\n\n1. **Install Deep Agents**:\n   ```bash\n   uv add deepagents\n   ```\n   or:\n   ```bash\n   pip install -U deepagents\n   ```\n   Deep Agents requires Python 3.10 or later.  \n   Source: [`installation.md`](installation.md), public LangChain product documentation.\n\n2. **Create and compile your deep-agent graph.** Deep Agents builds on `create_agent` and adds planning, a virtual filesystem, and subagent support.  \n   Source: [`deep-agents.md`](deep-agents.md), public LangChain product documentation.\n\n3. **Add `langgraph.json`** at your project root, pointing to the compiled graph.\n\n4. **Declare dependencies** in `pyproject.toml` or `requirements.txt`.\n\n5. **Deploy using either**:\n   - LangSmith UI: **Deployments \u2192 New**\n   - The `langgraph` CLI\n\nThe managed platform provides Postgres-backed persistence, WebSocket streaming, background runs, crons, and authentication hooks.  \nSource: [`deployment.md`](deployment.md), public LangChain product documentation.\n\nThe available documentation does not provide a deep-agent-specific `langgraph.json` example or CLI command, so I can\u2019t give the exact entrypoint syntax from the scoped corpus."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/deep-agents.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-4bbe-7901-8a40-2c02855768f2",
+          "text": "I don\u2019t have access to documentation covering how to deploy a **managed deep agent**. The only relevant documentation available in the **public LangChain product documentation** corpus describes Deep Agents as the `deepagents` package and explains that it wraps `create_agent` with planning, virtual filesystem, and subagent middleware; it does not provide managed deployment instructions.\n\nSource: [`deep-agents.md`](deep-agents.md) \u2014 public LangChain product documentation."
+        },
+        {
+          "prefixes": [
+            "productDocs"
+          ],
+          "pages": [
+            "productDocs/deep-agents.md"
+          ],
+          "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-4c93-7a62-9167-64e654abbcd2",
+          "text": "I don\u2019t have access to documentation covering how to deploy a **managed deep agent**. The available corpus is the **public LangChain product documentation**, and its Deep Agents page only documents the `deepagents` package and its capabilities\u2014not managed deployment procedures.\n\nSource: **public LangChain product documentation**, [`deep-agents.md`](deep-agents.md)."
+        }
+      ]
+    }
+  },
+  "beat_two": {
+    "question": "What is our on-call escalation path?",
+    "pass": true,
+    "engineer": {
+      "prefixes": [
+        "engineeringDocs"
+      ],
+      "pages": [
+        "engineeringDocs/on-call-escalation.md"
+      ],
+      "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-50e9-7323-ac77-fb5dd52dfd8f",
+      "text": "Our on-call escalation path is:\n\n- **Rotation:** `platform-agents-oncall`, with one primary and one secondary; handover is every Monday.\n- **T1 \u2014 degraded service:** Elevated latency or errors, but agents still respond. The **primary** responds within **30 minutes during business hours**.\n- **T2 \u2014 outage or incorrect production responses:** The **primary** responds within **15 minutes at any hour**. If unacknowledged after 15 minutes, the **secondary is paged automatically**.\n- **T3 \u2014 data or credential exposure:** **Immediate response**; the primary pages the **team lead directly**. T3 incidents must never be handled by one person alone\u2014wake someone.\n- **Further escalation:** The team lead is paged for any T3 and for a T2 lasting more than one hour.\n- **First action:** The primary acknowledges and starts a thread in `#platform-agents-releases`, documenting observed symptoms before making fixes.\n\nThe on-call engineer may roll back a revision, disable a schedule or channel, and rotate a suspected exposed credential without a ticket. Everything else requires a `PLAT-` ticket, filed retroactively within one business day.\n\nSource: **Internal engineering runbook**, [`on-call-escalation.md`](on-call-escalation.md)."
+    },
+    "employee": {
+      "prefixes": [
+        "productDocs"
+      ],
+      "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ccd6-51a5-7bb3-89ca-5f154d4de79d",
+      "text": "I don\u2019t have access to your organization\u2019s internal on-call or escalation documentation. The only corpus available to me is the **public LangChain product documentation**, and it does not cover an on-call escalation path."
+    }
+  }
+}

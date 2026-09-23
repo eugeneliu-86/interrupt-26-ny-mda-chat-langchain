@@ -1,0 +1,11 @@
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+
+# Secrets — never commit a real key.
+.env
+.env.*
+# …but the template must ship: `cp .env.example .env.local` is the first
+# command in the README, and `.env.*` above would swallow it.
+!.env.example

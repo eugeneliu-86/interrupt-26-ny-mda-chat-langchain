@@ -1,0 +1,249 @@
+[
+  {
+    "run_id": "01a0ce32-f031-7b30-9e41-51521b565aef",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f031-7b30-9e41-51521b565aef",
+    "rejected": false,
+    "q1_identity": {
+      "pass": true,
+      "role": "engineer",
+      "display_name": "verify-engineer"
+    },
+    "q2_reachable": {
+      "pass": true,
+      "offered": [
+        "engineeringDocs",
+        "productDocs"
+      ],
+      "granted": [
+        "engineeringDocs",
+        "productDocs"
+      ]
+    },
+    "q3_called": {
+      "pass": true,
+      "called": [
+        "engineeringDocs"
+      ],
+      "tools": [
+        "engineeringDocs__fetch_doc",
+        "engineeringDocs__search_docs",
+        "read_file"
+      ]
+    },
+    "q4_denied": {
+      "pass": true,
+      "count": 0
+    },
+    "demo_version": "v5",
+    "model": [
+      "gpt-5.6-luna"
+    ]
+  },
+  {
+    "run_id": "01a0ce32-f02a-71e0-9941-7cbe5cce9737",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f02a-71e0-9941-7cbe5cce9737",
+    "rejected": false,
+    "q1_identity": {
+      "pass": true,
+      "role": "employee",
+      "display_name": "verify-employee"
+    },
+    "q2_reachable": {
+      "pass": true,
+      "offered": [
+        "productDocs"
+      ],
+      "granted": [
+        "productDocs"
+      ]
+    },
+    "q3_called": {
+      "pass": true,
+      "called": [
+        "productDocs"
+      ],
+      "tools": [
+        "productDocs__fetch_doc",
+        "productDocs__search_docs",
+        "read_file"
+      ]
+    },
+    "q4_denied": {
+      "pass": true,
+      "count": 0
+    },
+    "demo_version": "v5",
+    "model": [
+      "gpt-5.6-luna"
+    ]
+  },
+  {
+    "run_id": "01a0ce32-f024-73a3-a983-a90bbe159efc",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f024-73a3-a983-a90bbe159efc",
+    "rejected": true,
+    "q1_identity": {
+      "pass": true,
+      "role": null,
+      "display_name": null
+    },
+    "q2_reachable": {
+      "pass": true,
+      "offered": [],
+      "granted": []
+    },
+    "q3_called": {
+      "pass": true,
+      "called": [],
+      "tools": []
+    },
+    "q4_denied": {
+      "pass": true,
+      "count": 0
+    },
+    "demo_version": "v5",
+    "model": []
+  },
+  {
+    "run_id": "01a0ce32-f033-7590-a1fe-5a854abfa8a2",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f033-7590-a1fe-5a854abfa8a2",
+    "rejected": true,
+    "q1_identity": {
+      "pass": true,
+      "role": "admin",
+      "display_name": "verify-admin"
+    },
+    "q2_reachable": {
+      "pass": true,
+      "offered": [],
+      "granted": []
+    },
+    "q3_called": {
+      "pass": true,
+      "called": [],
+      "tools": []
+    },
+    "q4_denied": {
+      "pass": true,
+      "count": 0
+    },
+    "demo_version": "v5",
+    "model": []
+  },
+  {
+    "run_id": "01a0ce32-f02c-7211-9117-6624bd01e846",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f02c-7211-9117-6624bd01e846",
+    "rejected": false,
+    "q1_identity": {
+      "pass": true,
+      "role": "employee",
+      "display_name": "verify-employee"
+    },
+    "q2_reachable": {
+      "pass": true,
+      "offered": [
+        "productDocs"
+      ],
+      "granted": [
+        "productDocs"
+      ]
+    },
+    "q3_called": {
+      "pass": true,
+      "called": [
+        "productDocs"
+      ],
+      "tools": [
+        "productDocs__search_docs",
+        "read_file"
+      ]
+    },
+    "q4_denied": {
+      "pass": true,
+      "count": 0
+    },
+    "demo_version": "v5",
+    "model": [
+      "gpt-5.6-luna"
+    ]
+  },
+  {
+    "run_id": "01a0ce32-f023-7d93-948e-48fe5a9a6931",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f023-7d93-948e-48fe5a9a6931",
+    "rejected": false,
+    "q1_identity": {
+      "pass": true,
+      "role": "engineer",
+      "display_name": "verify-engineer"
+    },
+    "q2_reachable": {
+      "pass": true,
+      "offered": [
+        "engineeringDocs",
+        "productDocs"
+      ],
+      "granted": [
+        "engineeringDocs",
+        "productDocs"
+      ]
+    },
+    "q3_called": {
+      "pass": true,
+      "called": [
+        "engineeringDocs",
+        "productDocs"
+      ],
+      "tools": [
+        "engineeringDocs__search_docs",
+        "productDocs__fetch_doc",
+        "productDocs__search_docs",
+        "read_file"
+      ]
+    },
+    "q4_denied": {
+      "pass": true,
+      "count": 0
+    },
+    "demo_version": "v5",
+    "model": [
+      "gpt-5.6-luna"
+    ]
+  },
+  {
+    "run_id": "01a0ce32-f019-7e83-9c3d-fad6377cd068",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f019-7e83-9c3d-fad6377cd068",
+    "rejected": false,
+    "q1_identity": {
+      "pass": true,
+      "role": "employee",
+      "display_name": "verify-employee"
+    },
+    "q2_reachable": {
+      "pass": true,
+      "offered": [
+        "productDocs"
+      ],
+      "granted": [
+        "productDocs"
+      ]
+    },
+    "q3_called": {
+      "pass": true,
+      "called": [
+        "productDocs"
+      ],
+      "tools": [
+        "ls",
+        "productDocs__search_docs",
+        "read_file"
+      ]
+    },
+    "q4_denied": {
+      "pass": true,
+      "count": 0
+    },
+    "demo_version": "v5",
+    "model": [
+      "gpt-5.6-luna"
+    ]
+  }
+]

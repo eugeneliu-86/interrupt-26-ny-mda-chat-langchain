@@ -1,0 +1,263 @@
+/* Projection-first styling (ph. 06 §5).
+ *
+ * The acceptance criterion is "readable from the back of a room at 1280x720,
+ * zoomed to 150%". That is the constraint that sets every size here: the base
+ * is 17px rather than the usual 14-16, chips are full-size rather than
+ * micro-badges, and nothing meaningful is rendered below 15px.
+ *
+ * No CSS framework. A DE must be running this in five minutes from a clean
+ * machine (§7), and every dependency is another thing that can fail during
+ * install in a conference hall with bad wifi. */
+
+:root {
+  --bg: #0b0e14;
+  --panel: #131823;
+  --panel-2: #1b2130;
+  --line: #2a3344;
+  --text: #e8edf7;
+  --muted: #94a3b8;
+  --accent: #7dd3fc;
+  --granted: #4ade80;
+  --withheld: #f87171;
+  --warn: #fbbf24;
+  --radius: 10px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+code, kbd, .mono {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+}
+
+/* --- the simulated-identity banner ---------------------------------------
+ * C5. Must be visible without scrolling, at projection size, at all times.
+ * It is sticky rather than static for exactly that reason. */
+.banner {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: #3b2f0b;
+  border-bottom: 1px solid #66520f;
+  color: var(--warn);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1500px;
+  margin: 0 auto;
+  align-items: start;
+}
+@media (max-width: 1000px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.panel + .panel { margin-top: 16px; }
+
+.panel h2 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* --- identity picker ----------------------------------------------------- */
+.identity { display: flex; flex-direction: column; gap: 8px; }
+
+.identity button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 17px;
+  text-align: left;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.identity button:hover:not(:disabled) { border-color: var(--accent); }
+.identity button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: #10283a;
+  font-weight: 600;
+}
+.identity button:disabled { opacity: 0.55; cursor: progress; }
+.identity .dot {
+  width: 11px; height: 11px; border-radius: 50%;
+  border: 2px solid var(--muted); flex: none;
+}
+.identity button[aria-pressed="true"] .dot {
+  background: var(--accent); border-color: var(--accent);
+}
+
+/* --- grants panel --------------------------------------------------------
+ * The most valuable pixels in the build. The ordering and the ✗ row must NOT
+ * look alike: one is a prompt, the other is enforced, and rendering them the
+ * same way would make the UI lie about which difference is guaranteed. */
+.grants { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+
+.grants li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+}
+.grants .rank {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--granted);
+  min-width: 1.1em;
+}
+.grants li.preferred {
+  border-color: #2f6b43;
+  background: #10241a;
+}
+.grants .tag {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--granted);
+}
+.grants li.withheld {
+  border-style: dashed;
+  border-color: #6b2f2f;
+  background: #1d1113;
+  color: var(--muted);
+}
+.grants li.withheld .rank { color: var(--withheld); }
+.grants li.withheld .tag { color: var(--withheld); }
+.grants li.withheld .name { text-decoration: line-through; }
+
+.note {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.note strong { color: var(--text); }
+
+/* --- transcript ---------------------------------------------------------- */
+.thread { display: flex; flex-direction: column; gap: 14px; min-height: 340px; }
+
+.msg { padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--line); }
+.msg.human { background: #16233a; border-color: #2c4470; align-self: flex-end; max-width: 78%; }
+.msg.ai { background: var(--panel); }
+.msg.error { background: #2a1416; border-color: #7f2a2a; color: #fecaca; }
+.msg .who {
+  font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); font-weight: 700; margin-bottom: 6px;
+}
+.msg .body { white-space: pre-wrap; word-break: break-word; }
+.msg .body p { margin: 0 0 0.7em; }
+.msg .body p:last-child { margin-bottom: 0; }
+
+/* --- tool-call chips -----------------------------------------------------
+ * The prefix and the PATH, never a spinner. The path is the proof. */
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 2px; }
+.chip {
+  display: inline-flex; align-items: baseline; gap: 8px;
+  padding: 6px 11px; border-radius: 999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 14px;
+  border: 1px solid var(--line); background: var(--panel-2);
+}
+.chip .corpus { font-weight: 700; }
+.chip.engineeringDocs { border-color: #3f6b46; background: #12251a; }
+.chip.engineeringDocs .corpus { color: var(--granted); }
+.chip.productDocs { border-color: #2f5570; background: #0f1e2c; }
+.chip.productDocs .corpus { color: var(--accent); }
+.chip .arg { color: var(--muted); }
+
+/* --- composer ------------------------------------------------------------ */
+.composer { display: flex; gap: 10px; margin-top: 16px; }
+.composer input {
+  flex: 1; padding: 13px 15px; font: inherit; font-size: 17px;
+  color: var(--text); background: var(--panel-2);
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+.composer input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.composer button {
+  padding: 13px 22px; font: inherit; font-size: 17px; font-weight: 600;
+  color: #04121c; background: var(--accent);
+  border: 0; border-radius: var(--radius); cursor: pointer;
+}
+.composer button:disabled { opacity: 0.5; cursor: not-allowed; }
+.composer button.stop { background: var(--withheld); color: #260c0c; }
+
+.suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.suggestions button {
+  font: inherit; font-size: 14px; padding: 7px 12px;
+  color: var(--muted); background: transparent;
+  border: 1px dashed var(--line); border-radius: 999px; cursor: pointer;
+}
+.suggestions button:hover { color: var(--text); border-color: var(--accent); }
+
+.footer {
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 14px; color: var(--muted);
+}
+.footer a { color: var(--accent); font-weight: 600; }
+
+.empty { color: var(--muted); padding: 28px 4px; }
+
+/* --- compare mode -------------------------------------------------------- */
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 1100px) { .compare { grid-template-columns: 1fr; } }
+.compare > section { min-width: 0; }
+.compare h3 {
+  margin: 0 0 10px; font-size: 17px;
+  display: flex; align-items: center; gap: 10px;
+}
+.compare .sub { font-size: 14px; font-weight: 500; color: var(--muted); }
+
+.modeswitch { display: flex; gap: 8px; }
+.modeswitch a[role="button"],
+.modeswitch button {
+  text-decoration: none;
+  display: inline-block;
+  font: inherit; font-size: 15px; padding: 8px 14px;
+  color: var(--muted); background: var(--panel-2);
+  border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer;
+}
+.modeswitch a[role="button"][aria-pressed="true"],
+.modeswitch button[aria-pressed="true"] {
+  color: var(--text); border-color: var(--accent); background: #10283a; font-weight: 600;
+}

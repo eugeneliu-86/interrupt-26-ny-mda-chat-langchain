@@ -1,0 +1,90 @@
+[
+  {
+    "check": "both roles answer the canonical question",
+    "pass": true,
+    "detail": "engineer=['engineeringDocs'] employee=['productDocs'] answers_differ=True",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f031-7b30-9e41-51521b565aef",
+    "run_id": "01a0ce32-f031-7b30-9e41-51521b565aef",
+    "denials": 0
+  },
+  {
+    "check": "  \u2026 employee's half of the same check",
+    "pass": true,
+    "detail": "employee cited ['productDocs']",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f02a-71e0-9941-7cbe5cce9737",
+    "run_id": "01a0ce32-f02a-71e0-9941-7cbe5cce9737",
+    "denials": 0
+  },
+  {
+    "check": "no role declared",
+    "pass": true,
+    "detail": "rejected=True tools=[] error='this deployment requires context.role; expected engineer or employee'",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f024-73a3-a983-a90bbe159efc",
+    "run_id": "01a0ce32-f024-73a3-a983-a90bbe159efc",
+    "denials": 0
+  },
+  {
+    "check": "unknown role 'admin'",
+    "pass": true,
+    "detail": "rejected=True tools=[] error=\"unknown role 'admin'; expected one of employee, engineer\"",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f033-7590-a1fe-5a854abfa8a2",
+    "run_id": "01a0ce32-f033-7590-a1fe-5a854abfa8a2",
+    "denials": 0
+  },
+  {
+    "check": "employee asks an engineering question -> refusal",
+    "pass": true,
+    "detail": "prefixes=['productDocs'] said='I don\u2019t have access to your organization\u2019s internal on-call or escalation documentation. The only corpus avail'",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f02c-7211-9117-6624bd01e846",
+    "run_id": "01a0ce32-f02c-7211-9117-6624bd01e846",
+    "denials": 0
+  },
+  {
+    "check": "engineer asks a product-docs question -> answers (C2)",
+    "pass": true,
+    "detail": "prefixes=['engineeringDocs', 'productDocs']",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f023-7d93-948e-48fe5a9a6931",
+    "run_id": "01a0ce32-f023-7d93-948e-48fe5a9a6931",
+    "denials": 0
+  },
+  {
+    "check": "fetch a page from the other corpus -> not found here (C4)",
+    "pass": true,
+    "detail": "prefixes=['productDocs'] said='I couldn\u2019t find `on-call-escalation.md` in the documentation corpus available to me. I have access only to the'",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0ce32-f019-7e83-9c3d-fad6377cd068",
+    "run_id": "01a0ce32-f019-7e83-9c3d-fad6377cd068",
+    "denials": 0
+  },
+  {
+    "check": "one key, two roles, two tool surfaces (C10 core)",
+    "pass": true,
+    "detail": "the same API key produced ['engineeringDocs'] and ['productDocs']",
+    "trace": "",
+    "run_id": "",
+    "denials": 0
+  },
+  {
+    "check": "a key belonging to nobody",
+    "pass": true,
+    "detail": "HTTP 403",
+    "trace": "",
+    "run_id": "",
+    "denials": 0
+  },
+  {
+    "check": "no key at all",
+    "pass": true,
+    "detail": "HTTP 401",
+    "trace": "",
+    "run_id": "",
+    "denials": 0
+  },
+  {
+    "check": "layer 2 fired zero times across the matrix (C6)",
+    "pass": true,
+    "detail": "0 Access-denied ToolMessages",
+    "trace": "",
+    "run_id": "",
+    "denials": 0
+  }
+]

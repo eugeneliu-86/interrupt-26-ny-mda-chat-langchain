@@ -1,0 +1,26 @@
+# Secrets — never commit real API keys.
+.env
+.env.*
+# …but the TEMPLATE must ship, or a fresh clone has nothing to copy and the
+# first command in every README (`cp .env.example .env`) fails. `.env.*` above
+# swallows it, so the negation is load-bearing, not tidiness.
+!.env.example
+
+# Managed Deep Agent build output.
+.mda/
+
+# Legacy Harbor env scripts and run output stay local; other compiled evals/ are checked in.
+evals/harbor-env.sh
+evals/harbor-jobs/
+
+# Dependencies.
+node_modules/
+__pycache__/
+
+# OS / editor junk.
+.DS_Store
+Thumbs.db
+desktop.ini
+*.py[cod]
+.pytest_cache/
+.venv/
