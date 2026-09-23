@@ -323,8 +323,16 @@ test(
   "the compare-mode header is IGNORED unless DEMO_COMPARE_MODE is on",
   LIVE,
   async () => {
-    if (ENV.DEMO_COMPARE_MODE === "true" || process.env.DEMO_COMPARE_MODE === "true") {
-      console.log("    compare mode is ON for this server — see the next test");
+    // ASK THE SERVER, not our own env. The flag belongs to the process
+    // serving the app, which may have been started with it on the command
+    // line and not in .env.local — as it was during the phase 06 handover,
+    // where this test read its own environment, saw nothing, and reported
+    // the relaxed behaviour as a security failure. The "Side by side" switch
+    // renders only when compare mode is enabled, so the page is the
+    // authority on what the server is doing.
+    const home = await (await fetch(base)).text();
+    if (home.includes("Side by side")) {
+      console.log("    compare mode is ON for this server — this test does not apply");
       return;
     }
     const { cookie } = await pick("employee");

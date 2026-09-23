@@ -15,6 +15,7 @@
 import { useStream } from "@langchain/langgraph-sdk/react";
 import { useCallback, useState } from "react";
 
+import { proxyUrl } from "@/lib/apiUrl";
 import { describeError } from "@/lib/content";
 import { GRANTS, type Role } from "@/lib/grants";
 
@@ -25,7 +26,9 @@ function usePane(role: Role) {
   const [runId, setRunId] = useState<string | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
   const stream = useStream({
-    apiUrl: "/api/lg",
+    // Absolute, same-origin. The SDK cannot parse a relative apiUrl — see
+    // lib/apiUrl.ts. Still this app's own origin; still no key in the browser.
+    apiUrl: proxyUrl(),
     assistantId: ASSISTANT_ID,
     defaultHeaders: { "x-demo-role": role },
     onCreated: (run) => {

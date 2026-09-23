@@ -16,6 +16,7 @@
 import { useStream } from "@langchain/langgraph-sdk/react";
 import { useCallback, useRef, useState } from "react";
 
+import { proxyUrl } from "@/lib/apiUrl";
 import { describeError, isIdentityRejection } from "@/lib/content";
 import type { Role } from "@/lib/grants";
 
@@ -39,7 +40,9 @@ export function Console({
   const box = useRef<HTMLInputElement>(null);
 
   const stream = useStream({
-    apiUrl: "/api/lg",
+    // Absolute, same-origin. The SDK cannot parse a relative apiUrl — see
+    // lib/apiUrl.ts. Still this app's own origin; still no key in the browser.
+    apiUrl: proxyUrl(),
     assistantId: ASSISTANT_ID,
     // No apiKey. The proxy holds it; a key here would be in the bundle.
     onCreated: (run) => {
