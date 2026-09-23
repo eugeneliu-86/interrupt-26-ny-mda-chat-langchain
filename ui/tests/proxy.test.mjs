@@ -436,22 +436,73 @@ test("the top bar carries the logo on the left and the toggle on the right", {
 
   // Brand first, control last — the toggle is pushed right by `margin-left:
   // auto`, so source order is also visual order.
-  assert.match(bar[1], /langchain-logo\.webp/, "the logo is not in the top bar");
+  assert.match(bar[1], /class="mark"/, "the wordmark is not in the top bar");
+  assert.match(bar[1], /aria-label="LangChain"/, "the wordmark has no accessible name");
   if (home.includes("Side by side")) {
-    assert.match(bar[1], /modeswitch/, "the toggle is not in the top bar");
+    assert.match(bar[1], /modeswitch/, "the view toggle is not in the top bar");
     assert.ok(
-      bar[1].indexOf("langchain-logo") < bar[1].indexOf("modeswitch"),
-      "the toggle comes before the logo",
+      bar[1].indexOf('class="mark"') < bar[1].indexOf("modeswitch"),
+      "the view toggle comes before the logo",
     );
   }
+  assert.match(bar[1], /themetoggle/, "the theme toggle is not in the top bar");
   // The toggle must live OUTSIDE the left rail: compare mode removes the
   // rail, and a toggle in it would delete the control that gets you back.
 });
 
-test("the logo is actually served", { skip }, async () => {
-  const res = await fetch(`${base}/langchain-logo.webp`);
-  assert.equal(res.status, 200, "the logo 404s");
-  assert.match(res.headers.get("content-type") ?? "", /image\/webp/);
+test("the wordmark is actually served, and the old asset is gone", { skip }, async () => {
+  const res = await fetch(`${base}/langchain-wordmark.png`);
+  assert.equal(res.status, 200, "the wordmark 404s");
+  assert.match(res.headers.get("content-type") ?? "", /image\/png/);
+
+  // Replaced, not merely superseded. A stale asset in public/ is a thing
+  // someone re-points at later by accident.
+  const old = await fetch(`${base}/langchain-logo.webp`);
+  assert.equal(old.status, 404, "the previous logo is still being served");
+});
+
+test("dark is the default, and light is a pre-paint override", { skip }, async () => {
+  const html = await (await fetch(base)).text();
+
+  // No data-theme on the server render: dark is `:root`, so the default
+  // needs no attribute and a light-mode viewer gets one before first paint.
+  const htmlTag = /<html[^>]*>/.exec(html)[0];
+  assert.ok(!htmlTag.includes("data-theme"), `server rendered a theme: ${htmlTag}`);
+
+  // The script that avoids the flash must run in <head>, before the body.
+  const head = /<head>([\s\S]*?)<\/head>/.exec(html);
+  assert.ok(head, "no <head>");
+  assert.match(head[1], /demo-theme/, "the pre-paint theme script is missing");
+  assert.ok(
+    html.indexOf("demo-theme") < html.indexOf("<body"),
+    "the theme script runs after the body starts — the page will flash",
+  );
+});
+
+test("both palettes ship, and every colour is a token", { skip }, async () => {
+  const html = await (await fetch(base)).text();
+  const href = /\/_next\/static\/[^"']*\.css/.exec(html);
+  assert.ok(href, "no stylesheet linked");
+  const css = await (await fetch(`${base}${href[0]}`)).text();
+
+  // Dark is :root, light is the override.
+  assert.match(css, /--bg:\s*#030710/, "the dark page colour is missing");
+  assert.match(css, /\[data-theme="light"\]/, "there is no light override");
+  assert.match(css, /--bg:\s*#eff1f4/, "the light page colour is missing");
+
+  // The wordmark is painted through a mask, so it follows --brand rather
+  // than shipping a second image.
+  assert.match(css, /langchain-wordmark\.png/, "the wordmark mask is missing");
+  assert.match(css, /--brand:\s*#5fcaff/i, "the dark brand colour is missing");
+  assert.match(css, /--brand:\s*#006ddd/i, "the light brand colour is missing");
+
+  // THE PROPERTY THAT MAKES ONE ATTRIBUTE SWAP THE WHOLE UI: no rule outside
+  // the two token blocks names a colour directly. If one did, it would stay
+  // put when the theme changed — the failure mode is a single unreadable
+  // element that nobody notices until it is on a projector.
+  const withoutTokens = css.replace(/:root[^{]*\{[^}]*\}/g, "");
+  const strays = [...new Set(withoutTokens.match(/#[0-9a-fA-F]{3,8}\b/g) ?? [])];
+  assert.deepEqual(strays, [], `hardcoded colours outside the palette: ${strays}`);
 });
 
 test("the simulated-identity note is at the BOTTOM, and still unconditional", {

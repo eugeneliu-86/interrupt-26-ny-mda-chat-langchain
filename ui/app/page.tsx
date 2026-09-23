@@ -16,6 +16,7 @@ import { Console } from "@/components/Console";
 import { GrantsPanel } from "@/components/GrantsPanel";
 import { IdentityPicker } from "@/components/IdentityPicker";
 import { ModeSwitch } from "@/components/ModeSwitch";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { DEMO_VERSION, ROLES, type Role } from "@/lib/grants";
 import { readIdentity } from "@/lib/identity";
 
@@ -50,11 +51,17 @@ export default async function Page({
           {/* Supplied asset. Opaque WebP with no alpha, exported against
               #EFF1F4 — which is why the bar uses the page background rather
               than a white panel. */}
-          <img src="/langchain-logo.webp" alt="LangChain" width={30} height={30} />
+          {/* Painted through a mask so it takes the theme colour — see
+              globals.css. The supplied asset was an opaque mark on black
+              with an "After" caption baked in; it was cropped and keyed to
+              transparency. */}
+          <span className="mark" role="img" aria-label="LangChain" />
+          <span className="divider" aria-hidden />
           <span className="name">Documentation assistant</span>
           <span className="sub">· role-aware</span>
         </div>
         {compareEnabled && <ModeSwitch compare={wantCompare} />}
+        <ThemeToggle />
       </header>
 
       {!configured && (

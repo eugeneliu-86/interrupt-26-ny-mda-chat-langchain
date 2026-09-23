@@ -9,22 +9,52 @@
  * machine (§7), and every dependency is another thing that can fail during
  * install in a conference hall with bad wifi. */
 
-/* LangSmith's palette.
+/* LangSmith's palette, dark by default.
  *
- * Not invented: `--accent` is the #006DDD the LangChain documentation site
- * uses as its primary, with its own tints beside it, and `--bg` is sampled
- * from the supplied logo — the asset is an opaque WebP with no alpha, and
- * its background is #EFF1F4 because it was exported against exactly this
- * surface. Matching it is what lets the logo sit in the top bar without a
- * grey box around it. */
+ * SOURCED, NOT INVENTED. #030710 and #161F34 are the dark surfaces the
+ * LangChain documentation site uses; #006DDD is its primary and #7FC8FF its
+ * light tint; #5FCAFF is sampled from the supplied wordmark itself. So the
+ * brand blue in dark mode is literally the colour of the logo sitting next
+ * to it.
+ *
+ * Dark is the default because the demo is projected in a dark room. Light is
+ * an override on `[data-theme="light"]`, applied before first paint by the
+ * inline script in layout.tsx so the page never flashes the wrong theme.
+ *
+ * Every rule below this block uses the tokens and nothing else, which is what
+ * makes one attribute on <html> swap the whole UI. */
 :root {
-  --bg: #eff1f4;          /* page — the logo's own background */
-  --panel: #ffffff;       /* cards */
-  --panel-2: #f5f7f9;     /* insets, chips, inputs */
+  --bg: #030710;          /* page */
+  --panel: #0c1322;       /* cards */
+  --panel-2: #161f34;     /* insets, chips, inputs */
+  --line: #223050;
+  --line-strong: #2e3f66;
+  --text: #e8eefc;
+  --muted: #94a3bd;
+  --brand: #5fcaff;       /* the wordmark's own blue */
+  --accent: #7fc8ff;
+  --accent-soft: #10243c;
+  --accent-line: #2d5a86;
+  --granted: #4ade80;
+  --granted-soft: #10251a;
+  --granted-line: #2f6b43;
+  --withheld: #f87171;
+  --withheld-soft: #2a1416;
+  --withheld-line: #7f2a2a;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --radius: 10px;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --bg: #eff1f4;
+  --panel: #ffffff;
+  --panel-2: #f5f7f9;
   --line: #dfe3e9;
   --line-strong: #c9d1da;
   --text: #030710;
   --muted: #5b6672;
+  --brand: #006ddd;
   --accent: #006ddd;
   --accent-soft: #e5f4ff;
   --accent-line: #7fc8ff;
@@ -34,7 +64,7 @@
   --withheld: #b4231f;
   --withheld-soft: #fdeceb;
   --withheld-line: #f0b3b0;
-  --radius: 10px;
+  --shadow: 0 1px 2px rgba(3, 7, 16, 0.04);
   color-scheme: light;
 }
 
@@ -70,13 +100,29 @@ code, kbd, .mono {
   border-bottom: 1px solid var(--line);
 }
 .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
-.brand img {
+/* THE WORDMARK IS A MASK, NOT AN IMAGE.
+ *
+ * The supplied asset is a single-colour mark, so the PNG's alpha channel is
+ * all the shape information there is. Painting `--brand` through it means the
+ * logo is #5FCAFF on dark and #006DDD on light with no second file, no filter
+ * hack, and no chance of the two drifting apart.
+ *
+ * The original was an opaque PNG with the mark on black plus an "After"
+ * caption and a grey border baked in — it could not sit on any background at
+ * all. It was cropped to the mark and keyed to transparency first. */
+.brand .mark {
   display: block;
-  width: 30px;
-  height: 30px;
-  border-radius: 7px;
-  /* The asset is square and opaque; the radius keeps its edge from reading
-   * as a pasted tile against the bar. */
+  width: 122px;
+  height: 26px;   /* the asset is 347x74; 4.69:1 */
+  background-color: var(--brand);
+  -webkit-mask: url("/langchain-wordmark.png") no-repeat center / contain;
+  mask: url("/langchain-wordmark.png") no-repeat center / contain;
+}
+.brand .divider {
+  width: 1px;
+  height: 20px;
+  background: var(--line-strong);
+  flex: none;
 }
 .brand .name {
   font-size: 16px;
@@ -119,7 +165,7 @@ code, kbd, .mono {
   color: var(--muted);
   border-top: 1px solid var(--line);
 }
-.disclaimer strong { color: #4a5563; font-weight: 650; }
+.disclaimer strong { color: var(--text); font-weight: 650; opacity: 0.85; }
 
 /* Misconfiguration still shouts — it is an error, not a disclosure. */
 .notconfigured {
@@ -128,7 +174,7 @@ code, kbd, .mono {
   gap: 10px;
   padding: 11px 20px;
   font-size: 15px;
-  color: #8c1b18;
+  color: var(--withheld);
   background: var(--withheld-soft);
   border-bottom: 1px solid var(--withheld-line);
 }
@@ -161,7 +207,7 @@ code, kbd, .mono {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 16px;
-  box-shadow: 0 1px 2px rgba(3, 7, 16, 0.04);
+  box-shadow: var(--shadow);
 }
 .panel + .panel { margin-top: 16px; }
 
@@ -244,7 +290,7 @@ code, kbd, .mono {
   border-style: dashed;
   border-color: var(--withheld-line);
   background: var(--withheld-soft);
-  color: #7a5b59;
+  color: var(--muted);
 }
 .grants li.withheld .rank { color: var(--withheld); }
 .grants li.withheld .tag { color: var(--withheld); }
@@ -264,7 +310,7 @@ code, kbd, .mono {
 .msg { padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--line); }
 .msg.human { background: var(--accent-soft); border-color: var(--accent-line); align-self: flex-end; max-width: 78%; }
 .msg.ai { background: var(--panel); }
-.msg.error { background: var(--withheld-soft); border-color: var(--withheld-line); color: #8c1b18; }
+.msg.error { background: var(--withheld-soft); border-color: var(--withheld-line); color: var(--withheld); }
 .msg .who {
   font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--muted); font-weight: 700; margin-bottom: 6px;
@@ -314,7 +360,7 @@ code, kbd, .mono {
   border-radius: 5px;
   background: var(--panel-2);
   border: 1px solid var(--line);
-  color: #1e3a5f;
+  color: var(--accent);
 }
 .md pre {
   margin: 0 0 0.8em;
@@ -351,7 +397,7 @@ code, kbd, .mono {
   vertical-align: top;
 }
 .md th { background: var(--panel-2); font-weight: 700; white-space: nowrap; }
-.md tr:nth-child(even) td { background: rgba(3, 7, 16, 0.022); }
+.md tr:nth-child(even) td { background: color-mix(in srgb, var(--text) 3%, transparent); }
 
 .md blockquote {
   margin: 0 0 0.8em;
@@ -388,11 +434,11 @@ code, kbd, .mono {
 .composer input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .composer button {
   padding: 13px 22px; font: inherit; font-size: 17px; font-weight: 650;
-  color: #fff; background: var(--accent);
+  color: var(--bg); background: var(--accent);
   border: 0; border-radius: var(--radius); cursor: pointer;
 }
 .composer button:disabled { opacity: 0.5; cursor: not-allowed; }
-.composer button.stop { background: var(--withheld); color: #fff; }
+.composer button.stop { background: var(--withheld); color: var(--bg); }
 
 .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .suggestions button {
@@ -448,5 +494,25 @@ code, kbd, .mono {
 }
 .modeswitch a + a { border-left: 1px solid var(--line-strong); }
 .modeswitch a:hover { color: var(--text); background: var(--panel-2); }
-.modeswitch a[aria-current="page"] { background: var(--accent); color: #fff; }
+.modeswitch a[aria-current="page"] { background: var(--accent); color: var(--bg); }
+
+/* --- theme toggle, far right -------------------------------------------- */
+.themetoggle {
+  flex: none;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--muted);
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.themetoggle:hover { color: var(--text); border-color: var(--accent); }
+/* When the view toggle is absent (compare mode off) this still sits right. */
+.modeswitch + .themetoggle { margin-left: 0; }
+.topbar > .themetoggle:not(.modeswitch + *) { margin-left: auto; }
 
