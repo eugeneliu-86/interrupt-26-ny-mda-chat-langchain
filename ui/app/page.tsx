@@ -38,7 +38,8 @@ export default async function Page({
 }) {
   const identity = await readIdentity();
   const role = identity?.role ?? DEFAULT_ROLE;
-  const compareEnabled = process.env.DEMO_COMPARE_MODE === "true";
+  // On unless explicitly disabled — see the proxy route for what it relaxes.
+  const compareEnabled = process.env.DEMO_COMPARE_MODE !== "false";
   const wantCompare = (await searchParams).mode === "compare" && compareEnabled;
 
   const traceBase = (process.env.LANGSMITH_PROJECT_URL ?? "").replace(/\/$/, "");

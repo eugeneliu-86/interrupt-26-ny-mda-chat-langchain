@@ -58,13 +58,13 @@ async def corpora() -> dict[str, dict[str, str]]:
     """Both corpora, pulled once. Uses the local dev credential."""
     from langsmith import AsyncClient
 
-    from contracts.grants import CORPORA, repo_and_slug
+    from contracts.grants import CORPORA, hub_repo
 
     key = os.environ.get("MDA_DEV_CONTEXT_HUB_CORPUS") or os.environ["LANGSMITH_API_KEY"]
     client = AsyncClient(api_key=key)
     out: dict[str, dict[str, str]] = {}
     for prefix in CORPORA:
-        repo, _ = repo_and_slug(prefix)
+        repo = hub_repo(prefix)
         snap = await client.pull_agent(repo)
         out[prefix] = {p: f.content for p, f in snap.files.items()}
     return out

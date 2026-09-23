@@ -18,22 +18,23 @@ from typing import Any
 from langchain.tools import tool
 from managed_deepagents import connections
 
-from contracts.grants import CORPUS_BLURB, repo_and_slug
+from contracts.grants import CORPUS_BLURB, hub_repo
 from tools.search import rank, title_of
 
 #: Seconds a pulled snapshot is reused.
 #:
-#: Short on purpose. Rotating or revoking the corpus credential takes effect on
-#: the next PULL, not the next call — a cached snapshot keeps serving until it
-#: expires. Sixty seconds keeps the rotation demo snappy while still collapsing
-#: the many pulls a single multi-step answer would otherwise make.
-CACHE_TTL_SECONDS = float(os.environ.get("CORPUS_CACHE_TTL", "60"))
+#: ZERO BY DEFAULT, so every corpus call resolves the credential and every
+#: tool call in the trace shows its `resolve_connection` span — the demo points
+#: at that span on every question. The cost is one Agent Auth read and one pull
+#: per tool call. Set CORPUS_CACHE_TTL (e.g. 60) to collapse the pulls a single
+#: multi-step answer makes, at the price of the span appearing only on a miss.
+CACHE_TTL_SECONDS = float(os.environ.get("CORPUS_CACHE_TTL", "0"))
 
 #: prefix -> (expires_at, commit_hash, {path: content})
 _CACHE: dict[str, tuple[float, str, dict[str, str]]] = {}
 
 
-async def resolve_credential(slug: str, prefix: str) -> str:
+async def resolve_credential(prefix: str) -> str:
     """Fetch the corpus credential from Agent Auth, as a VISIBLE trace step.
 
     THE DEMO'S CENTRAL CLAIM, MADE OBSERVABLE. MDA resolves this credential
@@ -61,9 +62,9 @@ async def resolve_credential(slug: str, prefix: str) -> str:
         with trace(
             name="resolve_connection",
             run_type="chain",
-            inputs={"connection": slug, "owner": "agent", "corpus": prefix},
+            inputs={"connection": "context-hub-corpus", "owner": "agent", "corpus": prefix},
         ) as span:
-            key = await connections.get(slug, {"type": "agent"})
+            key = await connections.get("context-hub-corpus", {"type": "agent"})
             span.end(
                 outputs={
                     "resolved": True,
@@ -76,7 +77,7 @@ async def resolve_credential(slug: str, prefix: str) -> str:
     except ImportError:
         # Tracing is a convenience; resolution is not. Offline tests build
         # tools without langsmith present.
-        return await connections.get(slug, {"type": "agent"})
+        return await connections.get("context-hub-corpus", {"type": "agent"})
 
 
 def _note(**fields: object) -> None:
@@ -109,14 +110,14 @@ async def snapshot(prefix: str) -> tuple[str, dict[str, str]]:
         _note(corpus_cache="hit", corpus_cache_expires_in_s=round(cached[0] - now, 1))
         return cached[1], cached[2]
 
-    repo, slug = repo_and_slug(prefix)
+    repo = hub_repo(prefix)
     try:
         # Imported here so the module imports cleanly without langsmith present
         # (the offline tests build tools against a fake snapshot).
         from langsmith import AsyncClient
 
         _note(corpus_cache="miss")
-        key = await resolve_credential(slug, prefix)
+        key = await resolve_credential(prefix)
         client = AsyncClient(api_key=key)
         snap = await client.pull_agent(repo)
         files = {p: f.content for p, f in snap.files.items()}

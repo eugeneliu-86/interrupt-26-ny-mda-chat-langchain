@@ -3,56 +3,56 @@
     "check": "both roles answer the canonical question",
     "pass": true,
     "detail": "engineer=['engineeringDocs'] employee=['productDocs'] answers_differ=True",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-6163-79d2-9f26-833241559098",
-    "run_id": "01a0cebd-6163-79d2-9f26-833241559098",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cfda-ab68-7190-aad0-83908ae1e51c",
+    "run_id": "01a0cfda-ab68-7190-aad0-83908ae1e51c",
     "denials": 0
   },
   {
     "check": "  \u2026 employee's half of the same check",
     "pass": true,
     "detail": "employee cited ['productDocs']",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-60da-7c90-9e7e-a7e8915f1ce4",
-    "run_id": "01a0cebd-60da-7c90-9e7e-a7e8915f1ce4",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cfda-ab99-7063-b711-1c5d464eb111",
+    "run_id": "01a0cfda-ab99-7063-b711-1c5d464eb111",
     "denials": 0
   },
   {
     "check": "no role declared",
     "pass": true,
     "detail": "rejected=True tools=[] error='this deployment requires context.role; expected engineer or employee'",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-601a-74f0-bced-8d9d75fef6d8",
-    "run_id": "01a0cebd-601a-74f0-bced-8d9d75fef6d8",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cfda-ab02-7c40-85e5-ec16f6a52a22",
+    "run_id": "01a0cfda-ab02-7c40-85e5-ec16f6a52a22",
     "denials": 0
   },
   {
     "check": "unknown role 'admin'",
     "pass": true,
     "detail": "rejected=True tools=[] error=\"unknown role 'admin'; expected one of employee, engineer\"",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-60a7-7542-ac8e-835efd25282e",
-    "run_id": "01a0cebd-60a7-7542-ac8e-835efd25282e",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cfda-ab78-7062-b1a0-f1da618a866a",
+    "run_id": "01a0cfda-ab78-7062-b1a0-f1da618a866a",
     "denials": 0
   },
   {
     "check": "employee asks an engineering question -> refusal",
     "pass": true,
-    "detail": "prefixes=['productDocs'] said='I don\u2019t have access to your organization\u2019s internal on-call or incident-response documentation. The only corpu'",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-600a-7282-8159-f9331f08cc27",
-    "run_id": "01a0cebd-600a-7282-8159-f9331f08cc27",
+    "detail": "prefixes=['productDocs'] said='I don\u2019t have access to your organization\u2019s internal on-call or escalation documentation. The only corpus avail'",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cfda-ab9b-7350-914e-94af2df07a6d",
+    "run_id": "01a0cfda-ab9b-7350-914e-94af2df07a6d",
     "denials": 0
   },
   {
     "check": "engineer asks a product-docs question -> answers (C2)",
     "pass": true,
     "detail": "prefixes=['engineeringDocs', 'productDocs']",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-602d-7222-95ac-81a2b78bacda",
-    "run_id": "01a0cebd-602d-7222-95ac-81a2b78bacda",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cfda-ab82-79b1-a37b-e0a4d663c3d5",
+    "run_id": "01a0cfda-ab82-79b1-a37b-e0a4d663c3d5",
     "denials": 0
   },
   {
     "check": "fetch a page from the other corpus -> not found here (C4)",
     "pass": true,
-    "detail": "prefixes=['productDocs'] said='I couldn\u2019t find `on-call-escalation.md` in the documentation corpus I can access. I only have access to the **'",
-    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cebd-6116-71a1-856f-5397c28a2460",
-    "run_id": "01a0cebd-6116-71a1-856f-5397c28a2460",
+    "detail": "prefixes=['productDocs'] said='I couldn\u2019t find `on-call-escalation.md` in the documentation corpus available to me. I only have access to the'",
+    "trace": "https://smith.langchain.com/o/a3866f07-2cf5-4e9c-a287-59ed817c2ecd/projects/p/28a396de-cca9-4594-b0ae-145a3ed6d686/r/01a0cfda-ab61-7e61-9662-f8d2b9ec4944",
+    "run_id": "01a0cfda-ab61-7e61-9662-f8d2b9ec4944",
     "denials": 0
   },
   {

@@ -27,10 +27,13 @@ It is compiled in, so a bump only takes effect on the next deploy.
 from __future__ import annotations
 
 #: The current demo version. See the bump rule above.
-DEMO_VERSION = "v8"
+DEMO_VERSION = "v9"
 
 #: What changed in each version, newest first. One line each.
 HISTORY = {
+    "v9": "Corpus cache TTL defaults to 0, so every corpus tool call resolves the "
+          "credential and shows its `resolve_connection` span. Comment-only trims "
+          "to agent.py; grants.py derives each corpus's Hub repo via hub_repo().",
     "v8": "Layer 1's decision became its own `authorize_tool_surface` span. As "
           "metadata it did not attach to the hook's span at all — it was "
           "inherited by the middleware spans underneath, appearing four times on "

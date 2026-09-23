@@ -320,7 +320,7 @@ test("the proxy costs one hop, not two", LIVE, async () => {
 // --- §6: compare mode relaxes the boundary, and only when switched on ------
 
 test(
-  "the compare-mode header is IGNORED unless DEMO_COMPARE_MODE is on",
+  "the compare-mode header is IGNORED when DEMO_COMPARE_MODE=false",
   LIVE,
   async () => {
     // ASK THE SERVER, not our own env. The flag belongs to the process

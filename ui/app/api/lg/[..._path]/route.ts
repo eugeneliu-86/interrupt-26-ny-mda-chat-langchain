@@ -33,20 +33,20 @@ type Ctx = { params: Promise<{ _path: string[] }> };
 /**
  * The header compare mode uses to pin a pane to one role (§6).
  *
- * THIS WEAKENS RULE 2 ON PURPOSE, AND ONLY WHEN TURNED ON. Normally the
+ * THIS WEAKENS RULE 2 ON PURPOSE. Normally the
  * cookie is the sole source of the role and the browser cannot influence it.
  * Compare mode needs two roles in flight from one page, so it sends this
  * header and the server validates it against the closed set in
  * `grants.json` — a client-chosen role, but only ever one of the two the
  * page is already displaying side by side.
  *
- * It is therefore OFF unless `DEMO_COMPARE_MODE=true`, so the default build
- * keeps the strict property that §1's acceptance test checks: a hand-crafted
- * request cannot change who it runs as. Do not turn this on and then claim
- * the browser has no say in the role.
+ * It is ON by default so every presenter gets the side-by-side view. Set
+ * `DEMO_COMPARE_MODE=false` to restore the strict property that §1's
+ * acceptance test checks: a hand-crafted request cannot change who it runs
+ * as. With it on, do not claim the browser has no say in the role.
  */
 const ROLE_HEADER = "x-demo-role";
-export const compareModeEnabled = () => process.env.DEMO_COMPARE_MODE === "true";
+export const compareModeEnabled = () => process.env.DEMO_COMPARE_MODE !== "false";
 
 function upstream(): string {
   const base = process.env.MDA_API_URL;

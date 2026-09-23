@@ -33,14 +33,16 @@ from contracts.roles import ROLES, Role
 #: against the real deployment, so treat the qualified form as required.
 HUB_OWNER = "chat-lc-lite"
 
-#: corpus prefix -> (Context Hub repo, connection slug).
+#: corpus prefix -> Context Hub repo.
 #:
-#: Both corpora share one connection because Context Hub access is
+#: There is no per-corpus connection slug: both corpora share the one
+#: `context-hub-corpus` connection, written literally in
+#: `tools/corpus.py:resolve_credential`, because Context Hub access is
 #: workspace-level, not per-repo. Three named connections holding one
 #: credential would be theater; one real connection is the honest claim.
-CORPORA: dict[str, tuple[str, str]] = {
-    "productDocs": ("product-docs", "context-hub-corpus"),
-    "engineeringDocs": ("engineering-runbooks", "context-hub-corpus"),
+CORPORA: dict[str, str] = {
+    "productDocs": "product-docs",
+    "engineeringDocs": "engineering-runbooks",
 }
 
 #: corpus prefix -> how the agent and the UI describe it to a person.
@@ -128,14 +130,14 @@ def withheld_prefixes(role: str) -> frozenset[str]:
     return frozenset(CORPORA) - granted_prefixes(role)
 
 
-def repo_and_slug(prefix: str) -> tuple[str, str]:
-    """The owner-qualified Context Hub repo and connection slug for one corpus.
+def hub_repo(prefix: str) -> str:
+    """The owner-qualified Context Hub repo for one corpus.
 
     The repo is returned already qualified, so no caller has to remember that
     `pull_agent` rejects a bare handle.
     """
     try:
-        repo, slug = CORPORA[prefix]
+        repo = CORPORA[prefix]
     except KeyError:
         raise ValueError(f"unknown corpus {prefix!r}") from None
-    return f"{HUB_OWNER}/{repo}", slug
+    return f"{HUB_OWNER}/{repo}"

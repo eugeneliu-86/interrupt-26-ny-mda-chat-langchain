@@ -97,22 +97,22 @@ cd ../agent && uv run python -m contracts.emit_grants_json
 
 ---
 
-## Compare mode (opt-in)
-
-```bash
-echo 'DEMO_COMPARE_MODE=true' >> .env.local
-```
+## Compare mode (on by default)
 
 Adds a **Side by side** view: one question, both identities, two threads, two
-traces.
+traces. To turn it off:
 
-It is off by default because it **relaxes rule 2**. Each pane pins its role
+```bash
+echo 'DEMO_COMPARE_MODE=false' >> .env.local
+```
+
+It **relaxes rule 2**. Each pane pins its role
 with an `x-demo-role` header, which the server validates against the closed
 set in `grants.json` — so the browser chooses the role for that request. That
 is acceptable only because the page is already displaying both roles at once,
 and it means the strict property ("a client cannot change who it runs as")
-holds in the default build and not in this one. Don't enable it and then
-claim otherwise.
+holds only with `DEMO_COMPARE_MODE=false`. Don't leave it on and then claim
+otherwise.
 
 An unrecognised header value is ignored rather than honoured, so a bad header
 falls back to the cookie instead of running as something unexpected.
