@@ -7,7 +7,9 @@
  * bearing:
  *
  *   1. AI text comes from `textOf`, never from `message.content` directly —
- *      see lib/content.ts for the empty-bubble trap.
+ *      see lib/content.ts for the empty-bubble trap — and is rendered as
+ *      Markdown, because the answers contain tables, lists and code spans
+ *      that are illegible as raw text. See Markdown.tsx.
  *   2. Tool calls render as chips carrying the CORPUS and the PATH, during
  *      the run. The path is the evidence; a spinner is not.
  *   3. A failure renders as a visible error row. A silent failure is
@@ -16,6 +18,8 @@
 import type { Message } from "@langchain/langgraph-sdk";
 
 import { chipsOf, textOf } from "@/lib/content";
+
+import { Markdown } from "./Markdown";
 
 export function Transcript({
   messages,
@@ -41,7 +45,7 @@ export function Transcript({
           return (
             <div className="msg human" key={m.id ?? `h${i}`}>
               <div className="who">You</div>
-              <div className="body">{textOf(m.content)}</div>
+              <div className="body plain">{textOf(m.content)}</div>
             </div>
           );
         }
@@ -69,7 +73,7 @@ export function Transcript({
             {body && (
               <>
                 <div className="who">Assistant</div>
-                <div className="body">{body}</div>
+                <Markdown>{body}</Markdown>
               </>
             )}
           </div>
