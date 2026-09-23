@@ -427,20 +427,59 @@ test("the UI reports the same build the agent does", { skip }, async () => {
 
 // --- the two views are different layouts, not just different panes --------
 
-test("the view toggle is in the top bar, next to the simulated-identity label", {
+test("the top bar carries the logo on the left and the toggle on the right", {
   skip,
 }, async () => {
   const home = await (await fetch(base)).text();
-  if (!home.includes("Side by side")) {
-    console.log("    compare mode is OFF for this server — no toggle to place");
-    return;
+  const bar = /<header class="topbar">([\s\S]*?)<\/header>/.exec(home);
+  assert.ok(bar, "could not find the top bar");
+
+  // Brand first, control last — the toggle is pushed right by `margin-left:
+  // auto`, so source order is also visual order.
+  assert.match(bar[1], /langchain-logo\.webp/, "the logo is not in the top bar");
+  if (home.includes("Side by side")) {
+    assert.match(bar[1], /modeswitch/, "the toggle is not in the top bar");
+    assert.ok(
+      bar[1].indexOf("langchain-logo") < bar[1].indexOf("modeswitch"),
+      "the toggle comes before the logo",
+    );
   }
-  // It has to live in the banner: compare mode removes the left rail, so a
-  // toggle in the rail would delete the control that gets you back.
-  const banner = /<div class="banner">([\s\S]*?)<\/div>\s*<main/.exec(home);
-  assert.ok(banner, "could not find the banner");
-  assert.match(banner[1], /modeswitch/, "the toggle is not in the top bar");
-  assert.match(banner[1], /Simulated identity/, "the C5 label left the banner");
+  // The toggle must live OUTSIDE the left rail: compare mode removes the
+  // rail, and a toggle in it would delete the control that gets you back.
+});
+
+test("the logo is actually served", { skip }, async () => {
+  const res = await fetch(`${base}/langchain-logo.webp`);
+  assert.equal(res.status, 200, "the logo 404s");
+  assert.match(res.headers.get("content-type") ?? "", /image\/webp/);
+});
+
+test("the simulated-identity note is at the BOTTOM, and still unconditional", {
+  skip,
+}, async () => {
+  for (const path of ["/", "/?mode=compare"]) {
+    const html = await (await fetch(`${base}${path}`)).text();
+
+    // C5 does not become optional by moving. It is in both views.
+    assert.match(html, /Simulated identity/, `C5 text missing on ${path}`);
+
+    // In the footer, not the top bar.
+    const footer = /<footer class="disclaimer">([\s\S]*?)<\/footer>/.exec(html);
+    assert.ok(footer, `no disclaimer footer on ${path}`);
+    assert.match(footer[1], /Simulated identity/, `C5 text is not in the footer on ${path}`);
+
+    const bar = /<header class="topbar">([\s\S]*?)<\/header>/.exec(html);
+    assert.ok(
+      bar && !/Simulated identity/.test(bar[1]),
+      `C5 text is still in the top bar on ${path}`,
+    );
+
+    // It comes after the transcript in document order.
+    assert.ok(
+      html.indexOf('class="disclaimer"') > html.indexOf("</main"),
+      `the disclaimer is not below the main content on ${path}`,
+    );
+  }
 });
 
 test("compare mode drops the single-identity rail", { skip }, async () => {

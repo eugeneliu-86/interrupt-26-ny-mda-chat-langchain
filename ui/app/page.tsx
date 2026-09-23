@@ -44,20 +44,21 @@ export default async function Page({
   const configured = Boolean(process.env.MDA_API_URL && process.env.LANGSMITH_API_KEY);
 
   return (
-    <>
-      {/* C5. Sticky, and never conditional — including in compare mode,
-          where everything else in the chrome goes away. */}
-      <div className="banner">
-        <span aria-hidden>⚠</span>
-        <span className="bannertext">
-          Simulated identity — nobody is authenticated. The role is chosen from
-          a menu and injected server-side.
-        </span>
+    <div className="shell">
+      <header className="topbar">
+        <div className="brand">
+          {/* Supplied asset. Opaque WebP with no alpha, exported against
+              #EFF1F4 — which is why the bar uses the page background rather
+              than a white panel. */}
+          <img src="/langchain-logo.webp" alt="LangChain" width={30} height={30} />
+          <span className="name">Documentation assistant</span>
+          <span className="sub">· role-aware</span>
+        </div>
         {compareEnabled && <ModeSwitch compare={wantCompare} />}
-      </div>
+      </header>
 
       {!configured && (
-        <div className="banner" style={{ background: "#3a1416", borderColor: "#7f2a2a", color: "#fecaca" }}>
+        <div className="notconfigured">
           <span aria-hidden>✗</span>
           <span>
             <strong>Not configured.</strong> Set <code>MDA_API_URL</code> and{" "}
@@ -97,6 +98,19 @@ export default async function Page({
           )}
         </div>
       </main>
-    </>
+
+      {/* C5 — present and unconditional, but quiet. Moved here from a loud
+          banner at the top at the demo owner's request. `.shell` pins it to
+          the bottom of the viewport on a short page so it is on screen from
+          the first frame rather than only after scrolling. */}
+      <footer className="disclaimer">
+        <span aria-hidden>ⓘ</span>
+        <span>
+          <strong>Simulated identity.</strong> Nobody is authenticated. The
+          role is chosen from a menu and injected server-side; this demo
+          contains no access control.
+        </span>
+      </footer>
+    </div>
   );
 }

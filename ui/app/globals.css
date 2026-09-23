@@ -9,19 +9,33 @@
  * machine (§7), and every dependency is another thing that can fail during
  * install in a conference hall with bad wifi. */
 
+/* LangSmith's palette.
+ *
+ * Not invented: `--accent` is the #006DDD the LangChain documentation site
+ * uses as its primary, with its own tints beside it, and `--bg` is sampled
+ * from the supplied logo — the asset is an opaque WebP with no alpha, and
+ * its background is #EFF1F4 because it was exported against exactly this
+ * surface. Matching it is what lets the logo sit in the top bar without a
+ * grey box around it. */
 :root {
-  --bg: #0b0e14;
-  --panel: #131823;
-  --panel-2: #1b2130;
-  --line: #2a3344;
-  --text: #e8edf7;
-  --muted: #94a3b8;
-  --accent: #7dd3fc;
-  --granted: #4ade80;
-  --withheld: #f87171;
-  --warn: #fbbf24;
+  --bg: #eff1f4;          /* page — the logo's own background */
+  --panel: #ffffff;       /* cards */
+  --panel-2: #f5f7f9;     /* insets, chips, inputs */
+  --line: #dfe3e9;
+  --line-strong: #c9d1da;
+  --text: #030710;
+  --muted: #5b6672;
+  --accent: #006ddd;
+  --accent-soft: #e5f4ff;
+  --accent-line: #7fc8ff;
+  --granted: #1a7f4b;
+  --granted-soft: #e8f6ee;
+  --granted-line: #a7d8bd;
+  --withheld: #b4231f;
+  --withheld-soft: #fdeceb;
+  --withheld-line: #f0b3b0;
   --radius: 10px;
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * { box-sizing: border-box; }
@@ -40,27 +54,88 @@ code, kbd, .mono {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
 }
 
-/* --- the simulated-identity banner ---------------------------------------
- * C5. Must be visible without scrolling, at projection size, at all times.
- * It is sticky rather than static for exactly that reason. */
-.banner {
+/* --- top bar: logo left, view toggle right -------------------------------
+ * The bar is the PAGE background rather than a panel, because the supplied
+ * logo is opaque and shares that colour. On a white bar it would sit in a
+ * visible grey square. */
+.topbar {
   position: sticky;
   top: 0;
   z-index: 10;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 20px;
-  background: #3b2f0b;
-  border-bottom: 1px solid #66520f;
-  color: var(--warn);
-  font-weight: 600;
-  font-size: 16px;
+  gap: 14px;
+  padding: 12px 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
 }
-/* The warning takes the space; the view toggle is pushed to the far right.
- * At narrow widths the text wraps rather than squeezing the toggle, because
- * the toggle is the control and the text is the label. */
-.banner .bannertext { flex: 1 1 auto; min-width: 0; }
+.brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.brand img {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  /* The asset is square and opaque; the radius keeps its edge from reading
+   * as a pasted tile against the bar. */
+}
+.brand .name {
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.brand .sub {
+  font-size: 14px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+@media (max-width: 720px) { .brand .sub { display: none; } }
+
+/* --- the simulated-identity note -----------------------------------------
+ * C5 still requires this to be present and unconditional. It was a loud
+ * banner at the top; it now sits quietly at the bottom of the page at the
+ * demo owner's request.
+ *
+ * THE TRADE-OFF, WRITTEN DOWN: at the top it could not be missed. At the
+ * bottom it can be scrolled past. `.shell` below therefore pins it to the
+ * bottom of the viewport when the page is short, so it is on screen from
+ * the first frame rather than only after a long answer pushes it up. */
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.shell > main { flex: 1 0 auto; }
+
+.disclaimer {
+  flex: none;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 12px 22px 18px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+.disclaimer strong { color: #4a5563; font-weight: 650; }
+
+/* Misconfiguration still shouts — it is an error, not a disclosure. */
+.notconfigured {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 11px 20px;
+  font-size: 15px;
+  color: #8c1b18;
+  background: var(--withheld-soft);
+  border-bottom: 1px solid var(--withheld-line);
+}
+.notconfigured code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.92em;
+}
 
 .layout {
   display: grid;
@@ -86,6 +161,7 @@ code, kbd, .mono {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 16px;
+  box-shadow: 0 1px 2px rgba(3, 7, 16, 0.04);
 }
 .panel + .panel { margin-top: 16px; }
 
@@ -119,13 +195,13 @@ code, kbd, .mono {
 .identity button:hover:not(:disabled) { border-color: var(--accent); }
 .identity button[aria-pressed="true"] {
   border-color: var(--accent);
-  background: #10283a;
-  font-weight: 600;
+  background: var(--accent-soft);
+  font-weight: 650;
 }
 .identity button:disabled { opacity: 0.55; cursor: progress; }
 .identity .dot {
   width: 11px; height: 11px; border-radius: 50%;
-  border: 2px solid var(--muted); flex: none;
+  border: 2px solid var(--line-strong); flex: none;
 }
 .identity button[aria-pressed="true"] .dot {
   background: var(--accent); border-color: var(--accent);
@@ -153,8 +229,8 @@ code, kbd, .mono {
   min-width: 1.1em;
 }
 .grants li.preferred {
-  border-color: #2f6b43;
-  background: #10241a;
+  border-color: var(--granted-line);
+  background: var(--granted-soft);
 }
 .grants .tag {
   margin-left: auto;
@@ -166,9 +242,9 @@ code, kbd, .mono {
 }
 .grants li.withheld {
   border-style: dashed;
-  border-color: #6b2f2f;
-  background: #1d1113;
-  color: var(--muted);
+  border-color: var(--withheld-line);
+  background: var(--withheld-soft);
+  color: #7a5b59;
 }
 .grants li.withheld .rank { color: var(--withheld); }
 .grants li.withheld .tag { color: var(--withheld); }
@@ -186,9 +262,9 @@ code, kbd, .mono {
 .thread { display: flex; flex-direction: column; gap: 14px; min-height: 340px; }
 
 .msg { padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--line); }
-.msg.human { background: #16233a; border-color: #2c4470; align-self: flex-end; max-width: 78%; }
+.msg.human { background: var(--accent-soft); border-color: var(--accent-line); align-self: flex-end; max-width: 78%; }
 .msg.ai { background: var(--panel); }
-.msg.error { background: #2a1416; border-color: #7f2a2a; color: #fecaca; }
+.msg.error { background: var(--withheld-soft); border-color: var(--withheld-line); color: #8c1b18; }
 .msg .who {
   font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--muted); font-weight: 700; margin-bottom: 6px;
@@ -228,7 +304,7 @@ code, kbd, .mono {
 .md li > p { margin: 0 0 0.3em; }
 .md li::marker { color: var(--muted); }
 
-.md strong { color: #fff; font-weight: 700; }
+.md strong { color: var(--text); font-weight: 700; }
 .md em { color: var(--text); }
 
 .md code {
@@ -238,13 +314,14 @@ code, kbd, .mono {
   border-radius: 5px;
   background: var(--panel-2);
   border: 1px solid var(--line);
+  color: #1e3a5f;
 }
 .md pre {
   margin: 0 0 0.8em;
   padding: 12px 14px;
   overflow-x: auto;
   border-radius: 8px;
-  background: #0a0d13;
+  background: var(--panel-2);
   border: 1px solid var(--line);
 }
 .md pre code {
@@ -274,7 +351,7 @@ code, kbd, .mono {
   vertical-align: top;
 }
 .md th { background: var(--panel-2); font-weight: 700; white-space: nowrap; }
-.md tr:nth-child(even) td { background: rgba(255, 255, 255, 0.022); }
+.md tr:nth-child(even) td { background: rgba(3, 7, 16, 0.022); }
 
 .md blockquote {
   margin: 0 0 0.8em;
@@ -295,9 +372,9 @@ code, kbd, .mono {
   border: 1px solid var(--line); background: var(--panel-2);
 }
 .chip .corpus { font-weight: 700; }
-.chip.engineeringDocs { border-color: #3f6b46; background: #12251a; }
+.chip.engineeringDocs { border-color: var(--granted-line); background: var(--granted-soft); }
 .chip.engineeringDocs .corpus { color: var(--granted); }
-.chip.productDocs { border-color: #2f5570; background: #0f1e2c; }
+.chip.productDocs { border-color: var(--accent-line); background: var(--accent-soft); }
 .chip.productDocs .corpus { color: var(--accent); }
 .chip .arg { color: var(--muted); }
 
@@ -310,12 +387,12 @@ code, kbd, .mono {
 }
 .composer input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .composer button {
-  padding: 13px 22px; font: inherit; font-size: 17px; font-weight: 600;
-  color: #04121c; background: var(--accent);
+  padding: 13px 22px; font: inherit; font-size: 17px; font-weight: 650;
+  color: #fff; background: var(--accent);
   border: 0; border-radius: var(--radius); cursor: pointer;
 }
 .composer button:disabled { opacity: 0.5; cursor: not-allowed; }
-.composer button.stop { background: var(--withheld); color: #260c0c; }
+.composer button.stop { background: var(--withheld); color: #fff; }
 
 .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .suggestions button {
@@ -355,23 +432,21 @@ code, kbd, .mono {
   flex: none;
   margin-left: auto;
   display: flex;
-  border: 1px solid #66520f;
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   overflow: hidden;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--panel);
 }
 .modeswitch a {
   padding: 6px 15px;
   font-size: 14px;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.5;
   text-decoration: none;
-  color: #c9a227;
+  color: var(--muted);
   white-space: nowrap;
 }
-.modeswitch a + a { border-left: 1px solid #66520f; }
-.modeswitch a:hover { color: var(--warn); background: rgba(255, 255, 255, 0.05); }
-.modeswitch a[aria-current="page"] {
-  background: var(--warn);
-  color: #2a2003;
-}
+.modeswitch a + a { border-left: 1px solid var(--line-strong); }
+.modeswitch a:hover { color: var(--text); background: var(--panel-2); }
+.modeswitch a[aria-current="page"] { background: var(--accent); color: #fff; }
+
