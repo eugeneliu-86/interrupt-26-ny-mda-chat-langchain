@@ -72,7 +72,7 @@ Demo Workspace** (`a3866f07-2cf5-4e9c-a287-59ed817c2ecd`).
 
 ```bash
 cd ui
-cp .env.example .env.local     # paste your key into LANGSMITH_API_KEY
+cp .env.example .env.local     # paste your key into LANGSMITH_API_KEY (LangChain Demo Workspace)
 pnpm install
 pnpm dev                       # → http://localhost:3000
 ```
